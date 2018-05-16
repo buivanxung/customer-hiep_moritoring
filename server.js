@@ -61,19 +61,16 @@ io.on('connection', function (socket) {
     console.log('R:', "" +data);
     var check = " " + data;
     console.log(check.length);
-    if (check.length > 28) {
+    if (check.length > 22) {
       var status = check.split(",")
       var oxy = status[2].split("=");
       var oxy_v = oxy[1];
-      if (oxy_v < 6) {
+      if (oxy_v < 7) {
         portC.write ("A\n");
         console.log("write ss A");
       }else if(oxy_v > 15 ) {
         portC.write ("I\n");
         console.log("write ss I");
-        delay(1000);
-        portC.write ("A\n");
-        console.log("write ss A");
       }
       socket.broadcast.emit('feedback', data + " ");
     }
