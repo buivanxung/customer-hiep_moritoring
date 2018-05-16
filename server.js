@@ -56,6 +56,14 @@ io.on('connection', function (socket) {
   portR.on('readable', function () {
       console.log('Data:', port.read());
   });
+
+  portC.on('error', function(err) {
+  console.log('Error: ', err.message);
+  })
+  portR.on('error', function(err) {
+  console.log('Error: ', err.message);
+})
+
 });
 
 http.listen(5000, function () {
