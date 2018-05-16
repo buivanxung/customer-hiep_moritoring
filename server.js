@@ -10,6 +10,21 @@ app.use(express.static(__dirname + '/app'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/');
 
+var serialport = require("serialport");
+//var SerialPort = serialport.SerialPort; // localize object constructor
+var comPortC = '/dev/ttyPHA2';
+var portC = new serialport(comPortC, {
+     parser: serialport.parsers.readline("\r"),
+     baudrate: 9600
+  });
+
+  var comPortR = '/dev/ttyPHA1';
+  var portR = new serialport(comPortR, {
+       parser: serialport.parsers.readline("\r"),
+       baudrate: 115200
+    });
+
+
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/data";
 
@@ -47,15 +62,7 @@ function InsertToDatabase(data, gio, ngay) {
 
 // Routing
 app.get('/',function(req,res){
-  MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db("data");
-    dbo.collection("DuLieu").find({}).toArray(function(err, result) {
-      if (err) throw err;
-      res.render('web', {collection:result} );
-      db.close();
-    });
-  });
+    res.render('index', {collection:result} );
 })
 
 io.on('connection', function (socket) {
@@ -89,6 +96,32 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('status_client', data);
     console.log(data);
   });
+});
+
+///Port C
+portC.on("open", function () {
+   console.log ("comm port ready");
+});
+portC.on('data', function (data) {
+  console.log('Data sent:', data);
+  socket.broadcast.emit('feedback', data);
+});
+portC.on('readable', function () {
+    console.log('Data:', port.read());
+    socket.emit('new data2', port.read());
+});
+
+/// Port R
+portR.on("open", function () {
+   console.log ("comm port ready");
+});
+portR.on('data', function (data) {
+  console.log('Data sent:', data);
+  socket.broadcast.emit('feedback', data);
+});
+portR.on('readable', function () {
+    console.log('Data:', port.read());
+    socket.emit('new data2', port.read());
 });
 
 http.listen(5000, function () {
