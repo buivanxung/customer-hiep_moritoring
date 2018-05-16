@@ -60,17 +60,23 @@ io.on('connection', function (socket) {
   portR.on('data', function (data) {
     console.log('R:', "" +data);
     var check = " " + data;
-    var status = check.split(",")
-    var oxy = res[2].split("=");
-    var oxy_v = oxy[1];
-    if (oxy_v < 6) {
-      portC.wite ("A/n");
-      console.log("write ss A");
-    }else if(oxy_v > 15 ) {
-      portC.wite ("I/n");
-      console.log("write ss I");
+    console.log(check.length());
+    if (check.length() > 15) {
+      var status = check.split(",")
+      var oxy = status[2].split("=");
+      var oxy_v = oxy[1];
+      if (oxy_v < 6) {
+        portC.write ("A/n");
+        console.log("write ss A");
+      }else if(oxy_v > 15 ) {
+        portC.write ("I/n");
+        console.log("write ss I");
+        delay(500);
+        portC.write ("A/n");
+        console.log("write ss A");
+      }
+      socket.broadcast.emit('feedback', data + " ");
     }
-    socket.broadcast.emit('feedback', data + " ");
   });
   portR.on('readable', function () {
       console.log('Data:', port.read());
