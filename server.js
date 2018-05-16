@@ -14,14 +14,13 @@ var serialport = require("serialport");
 //var SerialPort = serialport.SerialPort; // localize object constructor
 var comPortC = '/dev/ttyPHA2';
 var portC = new serialport(comPortC, {
-     parser: serialport.parsers.readline("\r"),
-     baudrate: 9600
+     baudRate: 9600
   });
 
   var comPortR = '/dev/ttyPHA1';
   var portR = new serialport(comPortR, {
-       parser: serialport.parsers.readline("\r"),
-       baudrate: 115200
+   //    parser: serialport.parsers.readline("\r"),
+       baudRate: 115200
     });
 
 
