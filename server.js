@@ -33,11 +33,19 @@ app.get('/',function(req,res){
 io.on('connection', function (socket) {
   console.log("New connection");
   ///Port C
-  portC.on("open", function () {
-     console.log ("comm portC ready");
+  portC.on("open", function (err) {
+     if (err) {
+       return console.log('Error opening port: ', err.message);
+     } else {
+       console.log ("comm portC ready");
+     }
   });
-  portR.on("open", function () {
-     console.log ("comm portR ready");
+  portR.on("open", function (err) {
+    if (err) {
+      return console.log('Error opening port: ', err.message);
+    }else {
+      console.log ("comm portR ready");
+    }
   });
 
   portC.on('data', function (data) {
@@ -51,6 +59,17 @@ io.on('connection', function (socket) {
 
   portR.on('data', function (data) {
     console.log('R:', "" +data);
+    var check = " " + data;
+    var status = check.split(",")
+    var oxy = res[2].split("=");
+    var oxy_v = oxy[1];
+    if (oxy_v < 6) {
+      portC.wite ("A/n");
+      console.log("write ss A");
+    }else if(oxy_v > 15 ) {
+      portC.wite ("I/n");
+      console.log("write ss I");
+    }
     socket.broadcast.emit('feedback', data + " ");
   });
   portR.on('readable', function () {
