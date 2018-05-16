@@ -5,13 +5,12 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 app.engine('html', require('ejs').renderFile);
-app.use(require('stylus').middleware({ src: __dirname + '/app' }));
-app.use(express.static(__dirname + '/app'));
+app.use(require('stylus').middleware({ src: __dirname + '/' }));
+app.use(express.static(__dirname + '/'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/');
 
 var serialport = require("serialport");
-//var SerialPort = serialport.SerialPort; // localize object constructor
 var comPortC = '/dev/ttyPHA2';
 var portC = new serialport(comPortC, {
      baudRate: 9600
@@ -62,34 +61,36 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('status_client', data);
     console.log(data);
   });
+
+  ///Port C
+  portC.on("open", function () {
+     console.log ("comm portC ready");
+  });
+  portC.on('data', function (data) {
+    console.log('Data sent:', data);
+    socket.broadcast.emit('feedback', data);
+  });
+  portC.on('readable', function () {
+      console.log('Data:', port.read());
+      socket.emit('new data2', port.read());
+  });
+
+  /// Port R
+  portR.on("open", function () {
+     console.log ("comm portR ready");
+  });
+  portR.on('data', function (data) {
+    console.log('Data sent:', data);
+    socket.broadcast.emit('feedback', data);
+  });
+  portR.on('readable', function () {
+      console.log('Data:', port.read());
+      socket.emit('new data2', port.read());
+  });
 });
 
-///Port C
-portC.on("open", function () {
-   console.log ("comm port ready");
-});
-portC.on('data', function (data) {
-  console.log('Data sent:', data);
-  socket.broadcast.emit('feedback', data);
-});
-portC.on('readable', function () {
-    console.log('Data:', port.read());
-    socket.emit('new data2', port.read());
-});
 
-/// Port R
-portR.on("open", function () {
-   console.log ("comm port ready");
-});
-portR.on('data', function (data) {
-  console.log('Data sent:', data);
-  socket.broadcast.emit('feedback', data);
-});
-portR.on('readable', function () {
-    console.log('Data:', port.read());
-    socket.emit('new data2', port.read());
-});
 
 http.listen(5000, function () {
-  console.log("Server running with port 5000");
+  console.log("Server running");
 });
