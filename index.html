@@ -28,24 +28,22 @@
       {
         socket = io.connect('http://192.168.1.2:5000');
 				socket.on('feedback', function (data) {
-          console.log(data);
-          var asres = data + " ";
-          // var res = asres.split(",");
-          // tempt = res[0].split("=");
-          // tempt_v = tempt[1];
-          // cond = res[1].split("=");
-          // cond_v = cond[1];
-          // oxy = res[2].split("=");
-          // oxy_v = oxy[1];
-          // ph = res[3].split("=");
-          // ph_v = ph[1];
-          // bat = res[4].split("=");
-          // bat_v = bat[1];
-          // $('#temp1').html(tempt_v);
-          // $('#conduc1').html(cond_v);
-          // $('#oxy1').html(oxy_v);
-          // $('#ph').html(ph_v);
-          // console.log(res);
+          var res = data.split(",");
+          tempt = res[0].split("=");
+          tempt_v = tempt[1];
+          cond = res[1].split("=");
+          cond_v = cond[1];
+          oxy = res[2].split("=");
+          oxy_v = oxy[1];
+          ph = res[3].split("=");
+          ph_v = ph[1];
+          bat = res[4].split("=");
+          bat_v = bat[1];
+          $('#temp1').html(tempt_v);
+          $('#conduc1').html(cond_v);
+          $('#oxy1').html(oxy_v);
+          $('#ph').html(ph_v);
+          console.log(res);
 				});
         socket.on('sampled', function(data) {
           console.log(data);
