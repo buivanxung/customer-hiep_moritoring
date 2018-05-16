@@ -28,7 +28,7 @@
       {
         socket = io.connect('http://192.168.1.2:5000');
 				socket.on('feedback', function (data) {
-          console.log("" + data);
+          console.log(data);
           var asres = data + " ";
           // var res = asres.split(",");
           // tempt = res[0].split("=");
@@ -45,7 +45,7 @@
           // $('#conduc1').html(cond_v);
           // $('#oxy1').html(oxy_v);
           // $('#ph').html(ph_v);
-          console.log(res);
+          // console.log(res);
 				});
         socket.on('sampled', function(data) {
           console.log(data);
