@@ -67,7 +67,7 @@ io.on('connection', function (socket) {
      console.log ("comm portC ready");
   });
   portC.on('data', function (data) {
-    console.log('Data sent:', data);
+    console.log('Data sent:', " "+ data);
     socket.broadcast.emit('feedback', data);
   });
   portC.on('readable', function () {
@@ -80,7 +80,7 @@ io.on('connection', function (socket) {
      console.log ("comm portR ready");
   });
   portR.on('data', function (data) {
-    console.log('Data sent:', data);
+    console.log('Data sent:', "" +data);
     socket.broadcast.emit('feedback', data);
   });
   portR.on('readable', function () {
