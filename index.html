@@ -30,6 +30,7 @@
         $('#conduc1').html("0");
         $('#oxy1').html("0");
         $('#ph1').html("0");
+        $('#status').html("Đang kết nối");
         socket = io.connect('http://192.168.1.2:5000');
 				socket.on('feedback', function (data) {
           var res = data.split(",");
@@ -49,15 +50,13 @@
           $('#ph1').html(ph_v);
           console.log(res);
 				});
-        socket.on('sampled', function(data) {
-          console.log(data);
-          update_sampled(data);
-        });
-        socket.on('calibrated', function(data) {
-          console.log(data);
-        });
-        socket.on('status_client', function(data) {
-           $('#status').html(data);
+        socket.on('status', function(data) {
+          if (data == "R") {
+            $('#status').html("Máy Đang Bơm");
+          } else if (data == "S") {
+            $('#status').html("Máy Đang Tắt");
+          }
+           
           console.log(data);
         });
         
@@ -105,7 +104,7 @@
             <label ><span><strong><font size = "5">Trình trạng bơm</font></strong></span></label>
           </div>
           <div  align="center">
-            <label style="color:DodgerBlue;">Đang kết nối</label>
+            <label style="color:DodgerBlue;"><span id="status"> </span></label>
           </div>
           <div align="center">
             <input type="submit" name="run" value="Bật PUMP" onclick="return run();" size="300">

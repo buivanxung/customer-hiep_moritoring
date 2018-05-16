@@ -68,9 +68,11 @@ io.on('connection', function (socket) {
       if (oxy_v < 7) {
         portC.write ("A\n");
         console.log("write ss A");
+        socket.broadcast.emit('status', "R");
       }else if(oxy_v > 15 ) {
         portC.write ("I\n");
         console.log("write ss I");
+        socket.broadcast.emit('status', "S");
       }
       socket.broadcast.emit('feedback', data + " ");
     }
