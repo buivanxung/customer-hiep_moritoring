@@ -24,15 +24,27 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
     var socket;
+    var tempt,tempt_v, cond,cond_v, oxy, oxy_v, ph, ph_v, bat, bat_v;
     $(document).ready(function()
       {
         socket = io.connect('loacalhost:5000');
-				socket.on('message', function (data) {
-					var content = $('#messages').html() + data + '<br/>';
-					$('#messages').html(content);
-          if (data.length == 30) {
-          }
-          console.log(data);
+				socket.on('feedback', function (data) {
+          var res = data.toString('utf8').split(",");
+          tempt = res[0].split("=");
+          tempt_v = tempt[1];
+          cond = res[1].split("=");
+          cond_v = cond[1];
+          oxy = res[2].split("=");
+          oxy_v = oxy[1];
+          ph = res[3].split("=");
+          ph_v = ph[1];
+          bat = res[4].split("=");
+          bat_v = bat[1];
+          $('#temp1').html(tempt_v);
+          $('#conduc1').html(cond_v);
+          $('#oxy1').html(oxy_v);
+          $('#ph').html(ph_v);
+          console.log(res);
 				});
         socket.on('sampled', function(data) {
           console.log(data);
@@ -46,23 +58,23 @@
           console.log(data);
         });
 
-        setInterval(function () {
-          var raw_time = new Date();
-          $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
-        }, 100);
-        setInterval(function () {
-          var t1 = Math.floor(Math.random() * (33 - 31 + 1) ) + 31;
-          $('#temp1').html(t1);
-
-          var h1 = Math.floor(Math.random() * (80 - 75 + 1) ) + 75;
-          $('#conduc1').html(h1);
-
-          var h1 = Math.floor(Math.random() * (800 - 750 + 1) ) + 750;
-          $('#oxy1').html(h1);
-
-          var h1 = Math.floor(Math.random() * (800 - 750 + 1) ) + 750;
-          $('#ph1').html(h1);
-        },1000);
+        // setInterval(function () {
+        //   var raw_time = new Date();
+        //   $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
+        // }, 100);
+        // setInterval(function () {
+        //   var t1 = Math.floor(Math.random() * (33 - 31 + 1) ) + 31;
+        //   $('#temp1').html(t1);
+        //
+        //   var h1 = Math.floor(Math.random() * (80 - 75 + 1) ) + 75;
+        //   $('#conduc1').html(h1);
+        //
+        //   var h1 = Math.floor(Math.random() * (800 - 750 + 1) ) + 750;
+        //   $('#oxy1').html(h1);
+        //
+        //   var h1 = Math.floor(Math.random() * (800 - 750 + 1) ) + 750;
+        //   $('#ph1').html(h1);
+        // },1000);
       });
       function run() {
         if (socket) {
