@@ -26,7 +26,7 @@
     var socket;
     $(document).ready(function()
       {
-        socket = io.connect('loacalhost:5000');
+        socket = io.connect('http://192.168.1.2:5000');
 				socket.on('feedback', function (data) {
           var res = data.toString('utf8').split(",");
           tempt = res[0].split("=");
@@ -56,24 +56,6 @@
            $('#status').html(data);
           console.log(data);
         });
-
-        setInterval(function () {
-          var raw_time = new Date();
-          $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
-        }, 100);
-        setInterval(function () {
-          var t1 = Math.floor(Math.random() * (33 - 31 + 1) ) + 31;
-          $('#temp1').html(t1);
-
-          var h1 = Math.floor(Math.random() * (80 - 75 + 1) ) + 75;
-          $('#conduc1').html(h1);
-
-          var h1 = Math.floor(Math.random() * (800 - 750 + 1) ) + 750;
-          $('#oxy1').html(h1);
-
-          var h1 = Math.floor(Math.random() * (800 - 750 + 1) ) + 750;
-          $('#ph1').html(h1);
-        },1000);
       });
       function run() {
         if (socket) {
