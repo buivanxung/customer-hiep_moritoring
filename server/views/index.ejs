@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <!-- Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> Technology</title>
+    <link href="css/media_query.css" rel="stylesheet" type="text/css"/>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="css/animate.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <link href="css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+    <link href="css/owl.theme.default.css" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap CSS -->
+    <link href="css/style_1.css" rel="stylesheet" type="text/css"/>
+    <!-- Modernizr JS -->
+    <script src="js/modernizr-3.5.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    var socket;
+    $(document).ready(function()
+      {
+        // socket = io.connect('loacalhost:5050');
+				// socket.on('message', function (data) {
+				// 	var content = $('#messages').html() + data + '<br/>';
+				// 	$('#messages').html(content);
+        //   if (data.length == 30) {
+        //   }
+        //   console.log(data);
+				// });
+        // socket.on('sampled', function(data) {
+        //   console.log(data);
+        //   update_sampled(data);
+        // });
+        // socket.on('calibrated', function(data) {
+        //   console.log(data);
+        // });
+        // socket.on('status_client', function(data) {
+        //    $('#status').html(data);
+        //   console.log(data);
+        // });
+
+        setInterval(function () {
+          var raw_time = new Date();
+          $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
+        }, 100);
+        setInterval(function () {
+          var t1 = Math.floor(Math.random() * (33 - 31 + 1) ) + 31;
+          $('#temp1').html(t1);
+
+          var h1 = Math.floor(Math.random() * (80 - 75 + 1) ) + 75;
+          $('#conduc1').html(h1);
+
+          var h1 = Math.floor(Math.random() * (800 - 750 + 1) ) + 750;
+          $('#oxy1').html(h1);
+
+          var h1 = Math.floor(Math.random() * (800 - 750 + 1) ) + 750;
+          $('#ph1').html(h1);
+        },1000);
+      });
+      function run() {
+        if (socket) {
+					socket.emit('web_control_status', "run");
+				}
+          $("input[name='run']").attr("disabled", "disabled");
+          $("input[name='stop']").removeAttr("disabled");
+         $('#status_running').html("System running!");
+         return true;
+      }
+      function stop() {
+          if (socket) {
+					socket.emit('web_control_status', "stop");
+				 }
+         $("input[name='stop']").removeAttr("disabled");
+         $("input[name='run']").attr("disabled", "disabled");
+         $('#status_running').html("System stoping");
+         return true;
+      }
+    </script>
+</head>
+<body>
+<div class="container-fluid pb-4 pt-4 paddding">
+  <table>
+    <tr>
+      <table align="center" >
+        <th>
+          <svg width="1000" height="100">
+            <rect width="2000" height="10" style="fill:rgb(204, 221, 255);" />
+          </svg>
+        </th>
+      </table>
+    </tr>
+    <tr>
+      <table align="right" >
+        <th>
+          <div>
+            <label ><span><strong><font size = "5">Trình trạng bơm</font></strong></span></label>
+          </div>
+          <div  align="center">
+            <label style="color:DodgerBlue;">Đang kết nối</label>
+          </div>
+          <div align="center">
+            <input type="submit" name="run" value="Bật PUMP" onclick="return run();" size="300">
+            <input type="submit" name="stop" value="Tắt PUMP" onclick="return stop();" size="300">
+          </div>
+        </th>
+      </table>
+    </tr>
+    <tr>
+      <table align="center" >
+        <th>
+          <h1 style="color:DodgerBlue;"><font size = "20"><strong>Giám Sát thông số nước trong ao Tôm</strong></font> </h1>
+        </th>
+      </table>
+    </tr>
+    <tr>
+      <table align="center" >
+        <th>
+          <h1 style="color:DodgerBlue;"><font size = "20">--------------------------------</font> </h1>
+        </th>
+      </table>
+    </tr>
+    <tr>
+      <table align="center" >
+        <th>
+          <h1 style="color:DodgerBlack;"><font size = "20"><strong><span id="time"></span></strong></font> </h1>
+        </th>
+      </table>
+    </tr>
+    <tr>
+      <table style="width: 100%; align: center; height:100px" >
+        <tr style="border: 1px solid black">
+          <th style="border: 1px solid black"> <center> <font size = "5"> Tên </font><center></th>
+          <th style="border: 1px solid black;"> <center> <font size = "5"> Nhiệt độ (oC) </font></center></th>
+          <th style="border: 1px solid black"> <center> <font size = "5"> Độ mặn (o/00) </font></center></th>
+          <th style="border: 1px solid black"> <center> <font size = "5"> Oxy (mg/L)</font><center></th>
+          <th style="border: 1px solid black"> <center> <font size = "5"> PH</font></center></th>
+        </tr>
+        <tr style="border: 1px solid black">
+          <td style="border: 1px solid black;width: 10%;">
+            <label><center><strong><font size = "5">Thiết bị 1</font></strong></center></label>
+          </td>
+          <td style="border: 1px solid black;width: 22%;">
+            <img src="images/nhietda.png" width="120px" height="120px">
+            <label><center><strong><font size = "15"><span id="temp1"></span></font></strong></center></label>
+          </td>
+          <td style="border: 1px solid black;width: 22%;">
+            <img src="images/Conductivity.jpg" width="120px" height="120px">
+            <label><center><strong><font size = "15"><span id="conduc1"></span></font></strong></center></label>
+          </td>
+          <td style="border: 1px solid black;width: 22%;">
+            <img src="images/oxygen.png" width="120px" height="120px">
+            <label><center><strong><font size = "15"><span id="oxy1"></span></font></strong></center></label>
+          </td>
+          <td style="border: 1px solid black;width: 22%;">
+            <img src="images/PH.png" width="120px" height="120px">
+            <label><center><strong><font size = "15"><span id="ph1"></span></font></strong></center></label>
+          </td>
+        </tr>
+      </table>
+    </tr>
+  </table>
+</div>
+<div align="center">
+  <svg width="1000" height="100">
+    <rect width="2000" height="10" style="fill:rgb(204, 221, 255);" />
+  </svg>
+</div>
+<div class="container-fluid fh5co_footer_right_reserved">
+    <div class="container">
+        <div class="row  ">
+            <div class="col-12 col-md-6 py-4 Reserved"> IOT Smart Water - <strong>PHA </strong> - <strong>Distribution Commpany </strong> </div>
+            <div class="col-12 col-md-6 spdp_right py-4">
+        </div>
+    </div>
+</div>
+<div class="gototop js-top">
+    <a href="#" class="js-gotop"><i class="fa fa-arrow-up"></i></a>
+</div>
+<script src="js/jquery.waypoints.min.js"></script>
+<!-- Main -->
+<script src="js/main.js"></script>
+
+</body>
+</html>

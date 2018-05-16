@@ -17,51 +17,18 @@ var portC = new serialport(comPortC, {
      baudRate: 9600
   });
 
-  var comPortR = '/dev/ttyPHA1';
-  var portR = new serialport(comPortR, {
-   //    parser: serialport.parsers.readline("\r"),
-       baudRate: 115200
-    });
-
-
-// var MongoClient = require('mongodb').MongoClient;
-// var url = "mongodb://localhost:27017/data";
+var comPortR = '/dev/ttyPHA1';
+var portR = new serialport(comPortR, {
+     baudRate: 115200
+  });
 
 function delay(ms) {
    ms += new Date().getTime();
    while (new Date() < ms){}
 }
-// function getNextSequenceValue(sequenceName){
-//   MongoClient.connect(url, function(err, db) {
-//     if (err) throw err;
-//     var dbo = db.db("data");
-//         var sequenceDocument = dbo.counters.findAndModify({
-//         query:{_id: sequenceName },
-//         update: {$inc:{sequence_value:1}},
-//         new:true
-//           });
-//       return sequenceDocument.sequence_value;
-//     });
-//   }
-
-// function InsertToDatabase(data, gio, ngay) {
-//   MongoClient.connect(url, function(err, db) {
-//     if (err) {
-//       console.log("Error connect database");
-//     }
-//     var dbo = db.db("data");
-//     var myobj = { DuLieu: data, ThoiGian: gio, Ngay: ngay };
-//     dbo.collection("DuLieu").insertOne(myobj, function(err, res) {
-//       if (err) throw err;
-//       console.log("1 document inserted");
-//       db.close();
-//     });
-//   });
-// }
-
 // Routing
 app.get('/',function(req,res){
-    res.render('index', {collection:result} );
+    res.render('index', { title: 'Moritoring' });
 })
 
 io.on('connection', function (socket) {
