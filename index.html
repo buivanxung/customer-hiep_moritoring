@@ -28,8 +28,8 @@
       {
         socket = io.connect('http://192.168.1.2:5000');
 				socket.on('feedback', function (data) {
-          console.log(data);
-          var res = data.split(",");
+          var asres = data + " ";
+          var res = asres.split(",");
           tempt = res[0].split("=");
           tempt_v = tempt[1];
           cond = res[1].split("=");
