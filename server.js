@@ -49,7 +49,7 @@ io.on('connection', function (socket) {
   });
   portR.on('data', function (data) {
     console.log('Data sent R:', "" +data);
-    socket.broadcast.emit('feedback', data);
+    socket.broadcast.emit('feedback', data + "R");
   });
   portR.on('readable', function () {
       console.log('Data:', port.read());
