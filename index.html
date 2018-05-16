@@ -26,25 +26,25 @@
     var socket;
     $(document).ready(function()
       {
-        // socket = io.connect('loacalhost:5050');
-				// socket.on('message', function (data) {
-				// 	var content = $('#messages').html() + data + '<br/>';
-				// 	$('#messages').html(content);
-        //   if (data.length == 30) {
-        //   }
-        //   console.log(data);
-				// });
-        // socket.on('sampled', function(data) {
-        //   console.log(data);
-        //   update_sampled(data);
-        // });
-        // socket.on('calibrated', function(data) {
-        //   console.log(data);
-        // });
-        // socket.on('status_client', function(data) {
-        //    $('#status').html(data);
-        //   console.log(data);
-        // });
+        socket = io.connect('http://192.168.1.2:5000');
+				socket.on('message', function (data) {
+					var content = $('#messages').html() + data + '<br/>';
+					$('#messages').html(content);
+          if (data.length == 30) {
+          }
+          console.log(data);
+				});
+        socket.on('sampled', function(data) {
+          console.log(data);
+          update_sampled(data);
+        });
+        socket.on('calibrated', function(data) {
+          console.log(data);
+        });
+        socket.on('status_client', function(data) {
+           $('#status').html(data);
+          console.log(data);
+        });
 
         setInterval(function () {
           var raw_time = new Date();
