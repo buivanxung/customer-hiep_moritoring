@@ -33,6 +33,12 @@ app.get('/',function(req,res){
 io.on('connection', function (socket) {
   console.log("New connection");
   ///Port C
+  portC.on("open", function () {
+     console.log ("comm portC ready");
+  });
+  portR.on("open", function () {
+     console.log ("comm portR ready");
+  });
 
   portC.on('data', function (data) {
     console.log('Data sent C:', " "+ data);
@@ -45,18 +51,11 @@ io.on('connection', function (socket) {
 
   portR.on('data', function (data) {
     console.log('R:', "" +data);
-    socket.broadcast.emit('feedback', data + ",R");
+    socket.broadcast.emit('feedback', data + " ");
   });
   portR.on('readable', function () {
       console.log('Data:', port.read());
   });
-});
-
-portC.on("open", function () {
-   console.log ("comm portC ready");
-});
-portR.on("open", function () {
-   console.log ("comm portR ready");
 });
 
 http.listen(5000, function () {
