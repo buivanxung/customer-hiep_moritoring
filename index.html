@@ -26,6 +26,10 @@
     var socket;
     $(document).ready(function()
       {
+        $('#temp1').html("0");
+        $('#conduc1').html("0");
+        $('#oxy1').html("0");
+        $('#ph1').html("0");
         socket = io.connect('http://192.168.1.2:5000');
 				socket.on('feedback', function (data) {
           var res = data.split(",");
@@ -56,6 +60,11 @@
            $('#status').html(data);
           console.log(data);
         });
+        
+        setInterval(function () {
+          var raw_time = new Date();
+          $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
+        }, 100);
       });
       function run() {
         if (socket) {
