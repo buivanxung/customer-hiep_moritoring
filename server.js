@@ -56,12 +56,11 @@ io.on('connection', function (socket) {
   });
 
   /// Port R
-
   portR.on('data', function (data) {
     console.log('R:', "" +data);
     var check = " " + data;
     console.log(check.length);
-    if (check.length > 22) {
+    if (check.length > 30) {
       var status = check.split(",")
       var oxy = status[2].split("=");
       var oxy_v = oxy[1];
@@ -86,7 +85,7 @@ io.on('connection', function (socket) {
   })
   portR.on('error', function(err) {
   console.log('Error: ', err.message);
-})
+  })
 
 });
 
