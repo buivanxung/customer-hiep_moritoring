@@ -60,7 +60,6 @@
           console.log(res);
 				});
         socket.on('status', function(data) {
-          i = 1;
           if (data == "R") {
             $('#status').html("Máy Đang Bơm");
           } else if (data == "S") {
@@ -69,7 +68,6 @@
           console.log(data);
         });
         socket.on('control_status', function(data) {
-          i = 1;
           if (data == "F") {
             status = false;
             $("input[name='manual']").removeAttr("disabled");
@@ -80,8 +78,9 @@
           console.log(data);
         });
         setInterval(function () {
-          if ( i == 0) {
-            location.reload();
+          if ( i < 2) {
+            io.connect('http://localhost:5000');
+            i++;
           }
         }, 5000);
         setInterval(function () {
