@@ -7,7 +7,7 @@
     <title> Technology</title>
     <link href="css/media_query.css" rel="stylesheet" type="text/css"/>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="css/animate.css" rel="stylesheet" type="text/css"/>
@@ -22,16 +22,22 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
     var socket;
     $(document).ready(function()
-      {
+      { 
         $('#temp1').html("0");
         $('#conduc1').html("0");
         $('#oxy1').html("0");
         $('#ph1').html("0");
         $('#status').html("Đang kết nối");
-        socket = io.connect('http://192.168.1.2:5000');
+        socket = io.connect('http://localhost:5000',{
+		reconnection: true,
+		reconnectionDelay: 1000,
+		reconnectionDelayMax: 5000,
+		reconnectionAttempts: 99999
+	});
 				socket.on('feedback', function (data) {
           var res = data.split(",");
           tempt = res[0].split("=");
@@ -59,7 +65,11 @@
            
           console.log(data);
         });
-        
+        setInterval(function () {
+          if ($('#temp1').val() == "0") {
+		location.reload();
+		}
+        }, 1000);
         setInterval(function () {
           var raw_time = new Date();
           $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
@@ -67,20 +77,20 @@
       });
       function run() {
         if (socket) {
-					socket.emit('web_control_status', "run");
+					socket.emit('web_control_status', "R");
 				}
-          $("input[name='run']").attr("disabled", "disabled");
-          $("input[name='stop']").removeAttr("disabled");
-         $('#status_running').html("System running!");
+         $("input[name='run']").attr("disabled", "disabled");
+         $("input[name='stop']").removeAttr("disabled");
+         $('#status').html("Máy Đang Bơm");
          return true;
       }
       function stop() {
           if (socket) {
-					socket.emit('web_control_status', "stop");
+					socket.emit('web_control_status', "S");
 				 }
-         $("input[name='stop']").removeAttr("disabled");
-         $("input[name='run']").attr("disabled", "disabled");
-         $('#status_running').html("System stoping");
+         $("input[name='run']").removeAttr("disabled");
+         $("input[name='stop']").attr("disabled", "disabled");
+         $('#status').html("Máy Đang Tắt");
          return true;
       }
     </script>
