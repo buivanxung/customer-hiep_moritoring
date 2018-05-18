@@ -65,9 +65,9 @@ io.on('connection', function (socket) {
     socket.on('web_status', function(data) {
         if (data == "A") {
           status = true;
-        } else if (data == "M")
+        } else if (data == "M"){
           status = false;
-        {
+        }
       });
   portC.on('data', function (data) {
     console.log('Data sent C:', " "+ data);

@@ -68,8 +68,10 @@
         socket.on('control_status', function(data) {
           if (data == "F") {
             status = false;
+            $("input[name='manual']").removeAttr("disabled");
           } else if (data == "T") {
             status = true;
+            $("input[name='manual']").removeAttr("disabled");
           }
           console.log(data);
         });
@@ -91,7 +93,7 @@
       });
       function run() {
         if (socket) {
-					socket.emit('web_control', "R");
+					socket.broadcast.emit('web_control', "R");
 				}
          $("input[name='run']").attr("disabled", "disabled");
          $("input[name='stop']").removeAttr("disabled");
@@ -100,7 +102,7 @@
       }
       function stop() {
           if (socket) {
-					socket.emit('web_control', "S");
+					socket.broadcast.emit('web_control', "S");
 				 }
          $("input[name='run']").removeAttr("disabled");
          $("input[name='stop']").attr("disabled", "disabled");
@@ -110,10 +112,12 @@
       function manual() {
         if (status == true) {
           status = false;
-          socket.emit('web_status', "M");
+          socket.broadcast.emit('web_status', "M");
+          $("input[name='manual']").attr("disabled", "disabled");
         }else {
           status = true;
-          socket.emit('web_status', "A");
+          socket.broadcast.emit('web_status', "A");
+          $("input[name='manual']").attr("disabled", "disabled");
         }
        return true;
       }
