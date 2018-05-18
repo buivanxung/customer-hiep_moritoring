@@ -102,12 +102,12 @@ io.on('connection', function (socket) {
   });
   setInterval(function () {
     if (status == false) {
-      socket.emit('control_status', "F");
+      socket.broadcast.emit('control_status', "F");
     }else {
-      socket.emit('control_status', "T");
+      socket.broadcast.emit('control_status', "T");
     }
     console.log(status);
-  }, 10000);
+  }, 1000);
   portC.on('error', function(err) {
   console.log('Error: ', err.message);
   })

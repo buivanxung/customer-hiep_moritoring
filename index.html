@@ -32,6 +32,7 @@
         $('#oxy1').html("0");
         $('#ph1').html("0");
         $('#status').html("Đang kết nối");
+        delay(1000);
         socket = io.connect('http://192.168.1.2:5000',{
           reconnection: true,
           reconnectionDelay: 1000,
@@ -76,10 +77,6 @@
           console.log(data);
         });
         setInterval(function () {
-          if ($('#temp1').val() == "0") {
-            location.reload(true);
-            console.log("reload");
-          }
           if (status == true) {
             $('#mode').html("Tự động");
           } else {
@@ -91,9 +88,14 @@
           $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
         }, 100);
       });
+
+      function delay(ms) {
+         ms += new Date().getTime();
+         while (new Date() < ms){}
+      }
       function run() {
         if (socket) {
-					socket.broadcast.emit('web_control', "R");
+					socket.emit('web_control', "R");
 				}
          $("input[name='run']").attr("disabled", "disabled");
          $("input[name='stop']").removeAttr("disabled");
@@ -102,7 +104,7 @@
       }
       function stop() {
           if (socket) {
-					socket.broadcast.emit('web_control', "S");
+					socket.emit('web_control', "S");
 				 }
          $("input[name='run']").removeAttr("disabled");
          $("input[name='stop']").attr("disabled", "disabled");
