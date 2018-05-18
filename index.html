@@ -25,6 +25,7 @@
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
     var socket;
+
     $(document).ready(function()
       {
         $('#temp1').html("0");
@@ -32,7 +33,6 @@
         $('#oxy1').html("0");
         $('#ph1').html("0");
         $('#status').html("Đang kết nối");
-        delay(1000);
         socket = io.connect('http://192.168.1.2:5000',{
           reconnection: true,
           reconnectionDelay: 1000,
@@ -40,6 +40,7 @@
           reconnectionAttempts: 99999
         });
         var status;
+        var i = 0;
 				socket.on('feedback', function (data) {
           var res = data.split(",");
           tempt = res[0].split("=");
@@ -59,6 +60,7 @@
           console.log(res);
 				});
         socket.on('status', function(data) {
+          i = 1;
           if (data == "R") {
             $('#status').html("Máy Đang Bơm");
           } else if (data == "S") {
@@ -67,6 +69,7 @@
           console.log(data);
         });
         socket.on('control_status', function(data) {
+          i = 1;
           if (data == "F") {
             status = false;
             $("input[name='manual']").removeAttr("disabled");
@@ -76,11 +79,13 @@
           }
           console.log(data);
         });
-        var i = 0;
         setInterval(function () {
-          if (i < 3) {
+          if ( i == 0) {
             location.reload();
           }
+        }, 5000);
+        setInterval(function () {
+          if ()
           if (status == true) {
             $('#mode').html("Tự động");
           } else {
