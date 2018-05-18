@@ -76,7 +76,11 @@
           }
           console.log(data);
         });
+        var i = 0;
         setInterval(function () {
+          if (i < 3) {
+            location.reload();
+          }
           if (status == true) {
             $('#mode').html("Tự động");
           } else {
