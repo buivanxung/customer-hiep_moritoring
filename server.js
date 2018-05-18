@@ -21,6 +21,8 @@ var portR = new serialport(comPortR, {
      baudRate: 115200
   });
 
+
+
 function delay(ms) {
    ms += new Date().getTime();
    while (new Date() < ms){}
@@ -47,7 +49,26 @@ io.on('connection', function (socket) {
       console.log ("comm portR ready");
     }
   });
-
+  // Status  == true then automation else manual
+  var status = true;
+  socket.on('web_control', function(data) {
+      if (data == "R" && status == false) {
+        portC.write ("A\n");
+        console.log("write ss A");
+        socket.broadcast.emit('status', "R");
+      } else if (data == "S" && status == false){
+        portC.write ("I\n");
+        console.log("write ss I");
+        socket.broadcast.emit('status', "S");
+      }
+    });
+    socket.on('web_status', function(data) {
+        if (data == "A") {
+          status = true;
+        } else if (data == "M")
+          status = false;
+        {
+      });
   portC.on('data', function (data) {
     console.log('Data sent C:', " "+ data);
   });
@@ -64,11 +85,11 @@ io.on('connection', function (socket) {
       var status = check.split(",")
       var oxy = status[2].split("=");
       var oxy_v = oxy[1];
-      if (oxy_v < 7) {
+      if (oxy_v < 7 && status == true) {
         portC.write ("A\n");
         console.log("write ss A");
         socket.broadcast.emit('status', "R");
-      }else if(oxy_v > 15 ) {
+      }else if(oxy_v > 15 && status == true) {
         portC.write ("I\n");
         console.log("write ss I");
         socket.broadcast.emit('status', "S");
@@ -79,7 +100,14 @@ io.on('connection', function (socket) {
   portR.on('readable', function () {
       console.log('Data:', port.read());
   });
-
+  setInterval(function () {
+    if (status == false) {
+      socket.emit('control_status', "F");
+    }else {
+      socket.emit('control_status', "T");
+    }
+    console.log(status);
+  }, 10000);
   portC.on('error', function(err) {
   console.log('Error: ', err.message);
   })

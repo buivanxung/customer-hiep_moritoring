@@ -38,6 +38,7 @@
           reconnectionDelayMax : 5000,
           reconnectionAttempts: 99999
         });
+        var status;
 				socket.on('feedback', function (data) {
           var res = data.split(",");
           tempt = res[0].split("=");
@@ -64,9 +65,23 @@
           }
           console.log(data);
         });
+        socket.on('control_status', function(data) {
+          if (data == "F") {
+            status = false;
+          } else if (data == "T") {
+            status = true;
+          }
+          console.log(data);
+        });
         setInterval(function () {
           if ($('#temp1').val() == "0") {
             location.reload(true);
+            console.log("reload");
+          }
+          if (status == true) {
+            $('#mode').html("Tự động");
+          } else {
+            $('#mode').html("Điều khiển bằng tay");
           }
         }, 1000);
         setInterval(function () {
@@ -76,7 +91,7 @@
       });
       function run() {
         if (socket) {
-					socket.emit('web_control_status', "R");
+					socket.emit('web_control', "R");
 				}
          $("input[name='run']").attr("disabled", "disabled");
          $("input[name='stop']").removeAttr("disabled");
@@ -85,12 +100,22 @@
       }
       function stop() {
           if (socket) {
-					socket.emit('web_control_status', "S");
+					socket.emit('web_control', "S");
 				 }
          $("input[name='run']").removeAttr("disabled");
          $("input[name='stop']").attr("disabled", "disabled");
          $('#status').html("Máy Đang Tắt");
          return true;
+      }
+      function manual() {
+        if (status == true) {
+          status = false;
+          socket.emit('web_status', "M");
+        }else {
+          status = true;
+          socket.emit('web_status', "A");
+        }
+       return true;
       }
     </script>
 </head>
@@ -100,7 +125,7 @@
     <tr>
       <table align="center" >
         <th>
-          <svg width="1000" height="100">
+          <svg width="1000" height="80">
             <rect width="2000" height="10" style="fill:rgb(204, 221, 255);" />
           </svg>
         </th>
@@ -118,6 +143,10 @@
           <div align="center">
             <input type="submit" name="run" value="Bật PUMP" onclick="return run();" size="300">
             <input type="submit" name="stop" value="Tắt PUMP" onclick="return stop();" size="300">
+            <input type="submit" name="manual" value="Tự động" onclick="return manual();" size="300">
+          </div>
+          <div  align="center">
+            <label style="color:DodgerBlue;"><span id="mode"> </span></label>
           </div>
         </th>
       </table>
@@ -158,19 +187,19 @@
           </td>
           <td style="border: 1px solid black;width: 22%;">
             <img src="images/nhietda.png" width="120px" height="120px">
-            <label><center><strong><font size = "80"><span id="temp1"></span></font></strong></center></label>
+            <label><center><strong><font size = "130"><span id="temp1"></span></font></strong></center></label>
           </td>
           <td style="border: 1px solid black;width: 22%;">
             <img src="images/Conductivity.jpg" width="120px" height="120px">
-            <label><center><strong><font size = "80"><span id="conduc1"></span></font></strong></center></label>
+            <label><center><strong><font size = "130"><span id="conduc1"></span></font></strong></center></label>
           </td>
           <td style="border: 1px solid black;width: 22%;">
             <img src="images/oxygen.png" width="120px" height="120px">
-            <label><center><strong><font size = "80"><span id="oxy1"></span></font></strong></center></label>
+            <label><center><strong><font size = "130"><span id="oxy1"></span></font></strong></center></label>
           </td>
           <td style="border: 1px solid black;width: 22%;">
             <img src="images/PH.png" width="120px" height="120px">
-            <label><center><strong><font size = "80"><span id="ph1"></span></font></strong></center></label>
+            <label><center><strong><font size = "130"><span id="ph1"></span></font></strong></center></label>
           </td>
         </tr>
       </table>
