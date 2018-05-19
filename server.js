@@ -21,12 +21,6 @@ var portR = new serialport(comPortR, {
      baudRate: 115200
   });
 
-
-
-function delay(ms) {
-   ms += new Date().getTime();
-   while (new Date() < ms){}
-}
 // Routing
 app.get('/',function(req,res){
     res.render('index', { title: 'Moritoring' });
@@ -55,11 +49,11 @@ io.on('connection', function (socket) {
       if (data == "R" && status == false) {
         portC.write ("A\n");
         console.log("write ss A");
-        socket.broadcast.emit('status', "R");
+        socket.emit('status', "R");
       } else if (data == "S" && status == false){
         portC.write ("I\n");
         console.log("write ss I");
-        socket.broadcast.emit('status', "S");
+        socket.emit('status', "S");
       }
     });
     socket.on('web_status', function(data) {
@@ -85,16 +79,16 @@ io.on('connection', function (socket) {
       var status = check.split(",")
       var oxy = status[2].split("=");
       var oxy_v = oxy[1];
-      if (oxy_v < 7 && status == true) {
+      if (oxy_v < 9 && status == true) {
         portC.write ("A\n");
         console.log("write ss A");
-        socket.broadcast.emit('status', "R");
-      }else if(oxy_v > 15 && status == true) {
+        socket.emit('status', "R");
+      }else if(oxy_v > 12 && status == true) {
         portC.write ("I\n");
         console.log("write ss I");
-        socket.broadcast.emit('status', "S");
+        socket.emit('status', "S");
       }
-      socket.broadcast.emit('feedback', data + " ");
+      socket.emit('feedback', data + " ");
     }
   });
   portR.on('readable', function () {
@@ -102,12 +96,11 @@ io.on('connection', function (socket) {
   });
   setInterval(function () {
     if (status == false) {
-      socket.broadcast.emit('control_status', "F");
+      socket.emit('control_status', "F");
     }else {
-      socket.broadcast.emit('control_status', "T");
+      socket.emit('control_status', "T");
     }
-    console.log(status);
-  }, 1000);
+  }, 5000);
   portC.on('error', function(err) {
   console.log('Error: ', err.message);
   })
