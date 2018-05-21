@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title> Technology</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <link href="css/style_1.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="js/modernizr-3.5.0.min.js"></script>
@@ -22,7 +21,7 @@
       {
         $('#temp1').html("0 oC");
         $('#conduc1').html("0 (o/00)");
-        $('#oxy1').html("0 mg/L");
+        $('#oxy1').html("0 (mg/L)");
         $('#ph1').html("0");
         $('#status').html("Đang kết nối");
         socket = io.connect('http://localhost:5000',{
@@ -43,9 +42,9 @@
           var ph_v = ph[1];
           var bat = res[4].split("=");
           var bat_v = bat[1];
-          $('#temp1').html(tempt_v);
-          $('#conduc1').html(cond_v);
-          $('#oxy1').html(oxy_v);
+          $('#temp1').html(tempt_v + "oC");
+          $('#conduc1').html(cond_v + "(o/00)");
+          $('#oxy1').html(oxy_v +"(mg/L)");
           $('#ph1').html(ph_v);
           console.log(res);
 				});
@@ -79,7 +78,7 @@
           if (c_connect == true) {
             location.reload(true);
           }
-        }, 30000);
+        }, 120000);
         setInterval(function () {
           var raw_time = new Date();
           $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
@@ -107,11 +106,15 @@
       function manual() {
         if (status == true) {
           status = false;
+          if (socket) {
           socket.emit('web_status', "M");
+          }
           $("input[name='manual']").attr("disabled", "disabled");
         }else {
           status = true;
-          socket.emit('web_status', "A");
+            if (socket) {
+              socket.emit('web_status', "A");
+            }
           $("input[name='manual']").attr("disabled", "disabled");
         }
        return true;
@@ -128,7 +131,7 @@
             <label ><span><strong><font size = "100">Trình trạng bơm</font></strong></span></label>
           </div>
           <div  align="center">
-            <label style="color:DodgerBlue;"><span id="status"> </span></label>
+            <label style="color:DodgerBlue;"><font size = "5"><span id="status"></font> </span></label>
           </div>
           <div align="center">
             <input type="submit" name="run" value="Bật PUMP" onclick="return run();" size="5">
@@ -136,7 +139,7 @@
             <input type="submit" name="manual" value="Tự động" onclick="return manual();" size="5">
           </div>
           <div  align="center">
-            <label style="color:DodgerBlue;"><span id="mode"> </span></label>
+            <label style="color:DodgerBlue;"><font size = "5"><span id="mode"></font> </span></label>
           </div>
         </th>
       </table>
@@ -149,32 +152,32 @@
       </table>
     </tr>
     <tr>
-      <table style="width: 100%; align: center; height:100px" >
+      <table style="width: 100%; align: center;" >
         <tr>
-          <th> <center> <font size = "500"> Nhiệt độ </font></center></th>
-          <th> <center> <font size = "500"> Độ mặn  </font></center></th>
-          <th> <center> <font size = "500"> Oxy </font><center></th>
-          <th> <center> <font size = "500"> PH</font></center></th>
+          <th> <center> <font size = "10" color="#b30059">  Nhiệt độ </font></center></th>
+          <th> <center> <font size = "10" color="#b30059"> Độ mặn  </font></center></th>
+          <th> <center> <font size = "10" color="#b30059"> Oxy </font><center></th>
+          <th> <center> <font size = "10" color="#b30059"> PH</font></center></th>
         </tr>
         <tr style="align: center;">
-          <td style="width: 25%; height:120px; align: center;">
+          <td style="width: 25%; ">
             <div align="center">
-            <label><center><strong><font size = "500"><span id="temp1"></span></font></strong></center></label>
+            <label><center><strong><font size = "10"><span id="temp1"></span></font></strong></center></label>
             </div>
           </td>
-          <td style="width: 25%;height:120px; align: center;">
+          <td style="width: 25%;">
             <div align="center">
-                <label><center><strong><font size = "500"><span id="conduc1"></span></font></strong></center></label>
+                <label><center><strong><font size = "10"><span id="conduc1"></span></font></strong></center></label>
             </div>
           </td>
-          <td style="width: 25%;height:120px; align: center;">
+          <td style="width: 25%;">
             <div align="center">
-            <label><center><strong><font size = "500"><span id="oxy1"></span></font></strong></center></label>
+            <label><center><strong><font size = "10"><span id="oxy1"></span></font></strong></center></label>
             </div>
           </td>
-          <td style="width: 25%;height:120px; align: center;">
+          <td style="width: 25%;">
             <div align="center">
-            <label><center><strong><font size = "500"><span id="ph1"></span></font></strong></center></label>
+            <label><center><strong><font size = "10"><span id="ph1"></span></font></strong></center></label>
             </div>
           </td>
         </tr>
