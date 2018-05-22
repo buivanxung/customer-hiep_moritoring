@@ -15,8 +15,8 @@
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
     var socket;
-    var status;
     var c_connect = true;
+	var r_status = true;
     $(document).ready(function()
       {
         $('#temp1').html("0 oC");
@@ -24,7 +24,7 @@
         $('#oxy1').html("0 (mg/L)");
         $('#ph1').html("0");
         $('#status').html("Đang kết nối");
-        socket = io.connect('http://localhost:5000',{
+        socket = io.connect('http://192.168.1.2:5000',{
           reconnection: true,
           reconnectionDelay: 1000,
           reconnectionDelayMax : 5000,
@@ -59,16 +59,16 @@
         socket.on('control_status', function(data) {
           c_connect = false;
           if (data == "F") {
-            status = false;
+            r_status = false;
             $("input[name='manual']").removeAttr("disabled");
           } else if (data == "T") {
-            status = true;
+            r_status = true;
             $("input[name='manual']").removeAttr("disabled");
           }
           console.log(data);
         });
         setInterval(function () {
-          if (status == true) {
+          if (r_status == true) {
             $('#mode').html("Tự động");
           } else {
             $('#mode').html("Điều khiển bằng tay");
@@ -84,7 +84,7 @@
           $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
         }, 100);
       });
-
+	
       function run() {
         if (socket) {
 					socket.emit('web_control', "R");
@@ -104,19 +104,20 @@
          return true;
       }
       function manual() {
-        if (status == true) {
+        if (r_status == true) {
           status = false;
           if (socket) {
           socket.emit('web_status', "M");
           }
           $("input[name='manual']").attr("disabled", "disabled");
         }else {
-          status = true;
+          r_status = true;
             if (socket) {
               socket.emit('web_status', "A");
             }
           $("input[name='manual']").attr("disabled", "disabled");
         }
+	console.log(r_status);
        return true;
       }
     </script>

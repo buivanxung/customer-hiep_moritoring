@@ -26,7 +26,6 @@ app.get('/',function(req,res){
     res.render('index', { title: 'Moritoring' });
 })
 
-var status = false;
 io.on('connection', function (socket) {
   console.log("New connection");
   ///Port C
@@ -45,6 +44,8 @@ io.on('connection', function (socket) {
     }
   });
   // Status  == true then automation else manual
+  var status = fals var status = false;
+e;
   socket.on('web_control', function(data) {
       if (data == "R" && status == false) {
         portC.write ("A\n");
@@ -101,7 +102,7 @@ io.on('connection', function (socket) {
     }else {
       socket.emit('control_status', "T");
     }
-	console.log(status);
+//	console.log(status);
   }, 5000);
   portC.on('error', function(err) {
   console.log('Error: ', err.message);
