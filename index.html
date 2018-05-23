@@ -122,13 +122,13 @@
         if (r_status == true) {
           status = false;
           if (socket) {
-          socket.emit('web_status', "M");
+          socket.emit('server_web_status', "M");
           }
           $("input[name='manual']").attr("disabled", "disabled");
         }else {
           r_status = true;
             if (socket) {
-              socket.emit('web_status', "A");
+              socket.emit('server_web_status', "A");
             }
           $("input[name='manual']").attr("disabled", "disabled");
         }

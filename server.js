@@ -28,6 +28,7 @@ io.on('connection', function (socket) {
         socket.emit('server_status', "S");
         c_status = false;
       }
+      console.log(data);
     });
   socket.on('server_web_status', function(data) {
         if (data == "A") {
@@ -39,7 +40,7 @@ io.on('connection', function (socket) {
       });
   socket.on('feedback', function(data) {
           socket.emit('server_feedback',data);
-          console.log(" "+ data);
+          console.log("R"+ data);
       });
   setInterval(function () {
     if (s_status == false) {
