@@ -26,7 +26,8 @@ app.get('/',function(req,res){
     res.render('index', { title: 'Moritoring' });
 })
 
-var status = false;
+var s_status = false;
+var c_status = false;
 io.on('connection', function (socket) {
   console.log("New connection");
   ///Port C
@@ -46,21 +47,23 @@ io.on('connection', function (socket) {
   });
   // Status  == true then automation else manual
   socket.on('web_control', function(data) {
-      if (data == "R" && status == false) {
+      if (data == "R" && s_status == false) {
         portC.write ("A\n");
         console.log("write ss A");
         socket.emit('status', "R");
-      } else if (data == "S" && status == false){
+        c_status = true;
+      } else if (data == "S" && s_status == false){
         portC.write ("I\n");
         console.log("write ss I");
         socket.emit('status', "S");
+        c_status = false;
       }
     });
     socket.on('web_status', function(data) {
         if (data == "A") {
-          status = true;
+          s_status = true;
         } else if (data == "M"){
-          status = false;
+          s_status = false;
         }
 	 console.log(" "+ data);
       });
@@ -77,17 +80,19 @@ io.on('connection', function (socket) {
     var check = " " + data;
     console.log(check.length);
     if (check.length > 30) {
-      var status = check.split(",")
-      var oxy = status[2].split("=");
+      var raw = check.split(",")
+      var oxy = raw[2].split("=");
       var oxy_v = oxy[1];
-      if (oxy_v < 9 && status == true) {
+      if (oxy_v < 9 && s_status == true) {
         portC.write ("A\n");
         console.log("write ss A");
         socket.emit('status', "R");
-      }else if(oxy_v > 12 && status == true) {
+        c_status = true;
+      }else if(oxy_v > 12 && s_status == true) {
         portC.write ("I\n");
         console.log("write ss I");
         socket.emit('status', "S");
+        c_status = false;
       }
       socket.emit('feedback', data + " ");
     }
@@ -96,12 +101,17 @@ io.on('connection', function (socket) {
       console.log('Data:', port.read());
   });
   setInterval(function () {
-    if (status == false) {
+    if (s_status == false) {
       socket.emit('control_status', "F");
     }else {
       socket.emit('control_status', "T");
     }
-	console.log(status);
+    if (c_status == false) {
+      socket.emit('status', "S");
+    } else {
+      socket.emit('status', "R");
+    }
+	console.log(s_status);
   }, 5000);
   portC.on('error', function(err) {
   console.log('Error: ', err.message);
