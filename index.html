@@ -51,8 +51,12 @@
         socket.on('status', function(data) {
           if (data == "R") {
             $('#status').html("Máy Đang Bơm");
+            $("input[name='run']").attr("disabled", "disabled");
+            $("input[name='stop']").removeAttr("disabled");
           } else if (data == "S") {
             $('#status').html("Máy Đang Tắt");
+            $("input[name='stop']").attr("disabled", "disabled");
+            $("input[name='run']").removeAttr("disabled");
           }
           console.log(data);
         });
@@ -75,8 +79,6 @@
             $("input[name='manual']").val('Bằng Tay');
           } else {
             $('#mode').html("Điều khiển bằng tay");
-            $("input[name='run']").removeAttr("disabled");
-            $("input[name='stop']").removeAttr("disabled");
               $("input[name='manual']").val('Tự động');
           }
         }, 1000);
