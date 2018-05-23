@@ -24,13 +24,13 @@
         $('#oxy1').html("0 (mg/L)");
         $('#ph1').html("0");
         $('#status').html("Đang kết nối");
-        socket = io.connect('http://localhost:5000',{
+        socket = io.connect('http://103.15.51.143:5000',{
           reconnection: true,
           reconnectionDelay: 1000,
           reconnectionDelayMax : 5000,
           reconnectionAttempts: 99999
         });
-				socket.on('feedback', function (data) {
+				socket.on('server_feedback', function (data) {
           var res = data.split(",");
           var tempt = res[0].split("=");
           var tempt_v = tempt[1];
@@ -48,7 +48,7 @@
           $('#ph1').html(ph_v);
           console.log(res);
 				});
-        socket.on('status', function(data) {
+        socket.on('server_status', function(data) {
           if (data == "R" ) {
             $('#status').html("Trạng thái bơm: Đang chạy");
           } else if (data == "S" ) {
@@ -63,7 +63,7 @@
           }
           console.log(data);
         });
-        socket.on('control_status', function(data) {
+        socket.on('server_control_status', function(data) {
           c_connect = false;
           if (data == "F") {
             r_status = false;
@@ -98,7 +98,7 @@
 
       function run() {
         if (socket) {
-					socket.emit('web_control', "R");
+					socket.emit('server_web_control', "R");
 				}
         if (r_status == false) {
            $("input[name='run']").attr("disabled", "disabled");
@@ -109,7 +109,7 @@
       }
       function stop() {
           if (socket) {
-					socket.emit('web_control', "S");
+					socket.emit('server_web_control', "S");
 				 }
          if (r_status == false) {
            $("input[name='run']").removeAttr("disabled");

@@ -29,13 +29,17 @@ io.on('connection', function (socket) {
         c_status = false;
       }
     });
-    socket.on('server_web_status', function(data) {
+  socket.on('server_web_status', function(data) {
         if (data == "A") {
           s_status = true;
         } else if (data == "M"){
           s_status = false;
         }
-	 console.log(" "+ data);
+	       console.log(" "+ data);
+      });
+  socket.on('feedback', function(data) {
+          socket.emit('server_feedback',data);
+          console.log(" "+ data);
       });
   setInterval(function () {
     if (s_status == false) {
