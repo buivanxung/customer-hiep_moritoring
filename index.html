@@ -50,9 +50,9 @@
 				});
         socket.on('status', function(data) {
           if (data == "R" ) {
-            $('#status').html("Máy Đang Bơm");
+            $('#status').html("Trạng thái bơm: Đang chạy");
           } else if (data == "S" ) {
-            $('#status').html("Máy Đang Tắt");
+            $('#status').html("Trạng thái bơm: Đang Tắt");
           }
           if (data == "R" && r_status == false) {
             $("input[name='run']").attr("disabled", "disabled");
@@ -70,16 +70,18 @@
             $("input[name='manual']").removeAttr("disabled");
           } else if (data == "T") {
             r_status = true;
+            $("input[name='run']").attr("disabled", "disabled");
+            $("input[name='stop']").attr("disabled", "disabled");
             $("input[name='manual']").removeAttr("disabled");
           }
           console.log(data);
         });
         setInterval(function () {
           if (r_status == true) {
-            $('#mode').html("Tự động");
+            $('#mode').html("Mode: Tự động");
             $("input[name='manual']").val('Bằng Tay');
           } else {
-            $('#mode').html("Điều khiển bằng tay");
+            $('#mode').html("Mode: Điều khiển bằng tay");
               $("input[name='manual']").val('Tự động');
           }
         }, 1000);
@@ -98,18 +100,22 @@
         if (socket) {
 					socket.emit('web_control', "R");
 				}
-         $("input[name='run']").attr("disabled", "disabled");
-         $("input[name='stop']").removeAttr("disabled");
-         $('#status').html("Máy Đang Bơm");
-         return true;
+        if (r_status == false) {
+           $("input[name='run']").attr("disabled", "disabled");
+           $("input[name='stop']").removeAttr("disabled");
+           $('#status').html("Máy Đang Bơm");
+        }
+        return true;
       }
       function stop() {
           if (socket) {
 					socket.emit('web_control', "S");
 				 }
-         $("input[name='run']").removeAttr("disabled");
-         $("input[name='stop']").attr("disabled", "disabled");
-         $('#status').html("Máy Đang Tắt");
+         if (r_status == false) {
+           $("input[name='run']").removeAttr("disabled");
+           $("input[name='stop']").attr("disabled", "disabled");
+           $('#status').html("Máy Đang Tắt");
+         }
          return true;
       }
       function manual() {
