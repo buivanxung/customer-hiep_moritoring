@@ -3,6 +3,7 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+var querystring = require('querystring');
 var io = require('socket.io')(http);
 app.engine('html', require('ejs').renderFile);
 app.use(require('stylus').middleware({ src: __dirname + '/' }));
@@ -10,12 +11,45 @@ app.use(express.static(__dirname + '/'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/');
 
-var serialport = require("serialport");
-var comPortC = '/dev/ttyPHA2';
-var portC = new serialport(comPortC, {
-     baudRate: 9600
-  });
+var postData = querystring.stringify({
+    msg: 'hello world'
+});
 
+var options = {
+    hostname: 'localhost',
+    port: 3000,
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': postData.length
+    }
+};
+
+var req = http.request(options, function (res) {
+    console.log('STATUS:', res.statusCode);
+    console.log('HEADERS:', JSON.stringify(res.headers));
+
+    res.setEncoding('utf8');
+
+    res.on('data', function (chunk) {
+        console.log('BODY:', chunk);
+    });
+
+    res.on('end', function () {
+        console.log('No more data in response.');
+    });
+});
+
+req.on('error', function (e) {
+    console.log('Problem with request:', e.message);
+});
+
+function dataPost() {
+  req.write(postData);
+  req.end();
+}
+
+var serialport = require("serialport");
 var comPortR = '/dev/ttyPHA1';
 var portR = new serialport(comPortR, {
      baudRate: 115200
@@ -29,13 +63,6 @@ app.get('/',function(req,res){
 io.on('connection', function (socket) {
   console.log("New connection");
   ///Port C
-  portC.on("open", function (err) {
-     if (err) {
-       return console.log('Error opening port: ', err.message);
-     } else {
-       console.log ("comm portC ready");
-     }
-  });
   portR.on("open", function (err) {
     if (err) {
       return console.log('Error opening port: ', err.message);
@@ -44,8 +71,7 @@ io.on('connection', function (socket) {
     }
   });
   // Status  == true then automation else manual
-  var status = fals var status = false;
-e;
+  var status = false;
   socket.on('web_control', function(data) {
       if (data == "R" && status == false) {
         portC.write ("A\n");
@@ -65,13 +91,6 @@ e;
         }
 	 console.log(" "+ data);
       });
-  portC.on('data', function (data) {
-    console.log('Data sent C:', " "+ data);
-  });
-  portC.on('readable', function () {
-      console.log('Data:', port.read());
-  });
-
   /// Port R
   portR.on('data', function (data) {
     console.log('R:', "" +data);
@@ -86,7 +105,6 @@ e;
         console.log("write ss A");
         socket.emit('status', "R");
       }else if(oxy_v > 12 && status == true) {
-        portC.write ("I\n");
         console.log("write ss I");
         socket.emit('status', "S");
       }
@@ -104,15 +122,11 @@ e;
     }
 //	console.log(status);
   }, 5000);
-  portC.on('error', function(err) {
-  console.log('Error: ', err.message);
-  })
   portR.on('error', function(err) {
   console.log('Error: ', err.message);
   })
 
 });
-
 http.listen(5000, function () {
   console.log("Server running");
 });
