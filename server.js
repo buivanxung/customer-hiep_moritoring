@@ -31,8 +31,8 @@ app.get('/',function(req,res){
     res.render('index', { title: 'Moritoring' });
 })
 
-var s_status = false;
-var c_status = false;
+var status_control = false; // True automatic, false using hand
+var status_cerrent = false; // Status cerrent control
 io.on('connection', function (socket) {
   console.log("New connection");
   ///Port C
@@ -52,23 +52,23 @@ io.on('connection', function (socket) {
   });
   // Status  == true then automation else manual
   socket.on('web_control', function(data) {
-      if (data == "R" && s_status == false) {
+      if (data == "R" && status_control == false) {
         portC.write ("A\n");
         console.log("write ss A");
         socket.emit('status', "R");
-        c_status = true;
-      } else if (data == "S" && s_status == false){
+        status_cerrent = true;
+      } else if (data == "S" && status_control == false){
         portC.write ("I\n");
         console.log("write ss I");
         socket.emit('status', "S");
-        c_status = false;
+        status_cerrent = false;
       }
     });
     socket.on('web_status', function(data) {
         if (data == "A") {
-          s_status = true;
+          status_control = true;
         } else if (data == "M"){
-          s_status = false;
+          status_control = false;
         }
 	 console.log(" "+ data);
       });
@@ -88,35 +88,36 @@ io.on('connection', function (socket) {
       var raw = check.split(",")
       var oxy = raw[2].split("=");
       var oxy_v = oxy[1];
-      if (oxy_v < 9 && s_status == true) {
+      if (oxy_v < 9 && status_control == true) {
         portC.write ("A\n");
         console.log("write ss A");
         socket.emit('status', "R");
-        c_status = true;
-      }else if(oxy_v > 12 && s_status == true) {
+        status_cerrent = true;
+      }else if(oxy_v > 12 && status_control == true) {
         portC.write ("I\n");
         console.log("write ss I");
         socket.emit('status', "S");
-        c_status = false;
+        status_cerrent = false;
       }
       socket.emit('feedback', data + " ");
+      arm.emit('feedback', data + " ");
     }
   });
   portR.on('readable', function () {
       console.log('Data:', port.read());
   });
   setInterval(function () {
-    if (s_status == false) {
+    if (status_control == false) {
       socket.emit('control_status', "F");
     }else {
       socket.emit('control_status', "T");
     }
-    if (c_status == false) {
+    if (status_cerrent == false) {
       socket.emit('status', "S");
     } else {
       socket.emit('status', "R");
     }
-	console.log(s_status);
+	console.log(status_control);
   }, 5000);
   portC.on('error', function(err) {
   console.log('Error: ', err.message);
@@ -126,75 +127,44 @@ io.on('connection', function (socket) {
   })
 });
 
+
+// server_status chi trang thai dang running hay stopping
 arm.on('connect', function(){
   console.log("Connect to Server!");
-});// Status  == true then automation else manual
-arm.on('web_control', function(data) {
-    if (data == "R" && s_status == false) {
+});
+arm.on('server_web_control', function(data) {
+    if (data == "R" && status_control == false) {
       portC.write ("A\n");
       console.log("write ss A");
-      arm.emit('status', "R");
-      c_status = true;
-    } else if (data == "S" && s_status == false){
+      arm.emit('server_status', "R");
+      status_cerrent = true;
+    } else if (data == "S" && status_control == false){
       portC.write ("I\n");
       console.log("write ss I");
-      arm.emit('status', "S");
-      c_status = false;
+      arm.emit('server_status', "S");
+      status_cerrent = false;
     }
   });
-  arm.on('web_status', function(data) {
+  arm.on('server_web_status', function(data) {
       if (data == "A") {
-        s_status = true;
+        status_control = true;
       } else if (data == "M"){
-        s_status = false;
+        status_control = false;
       }
  console.log(" "+ data);
     });
-portC.on('data', function (data) {
-  console.log('Data sent C:', " "+ data);
-});
-portC.on('readable', function () {
-    console.log('Data:', port.read());
-});
-
-/// Port R
-portR.on('data', function (data) {
-  console.log('R:', "" +data);
-  var check = " " + data;
-  console.log(check.length);
-  if (check.length > 30) {
-    var raw = check.split(",")
-    var oxy = raw[2].split("=");
-    var oxy_v = oxy[1];
-    if (oxy_v < 9 && s_status == true) {
-      portC.write ("A\n");
-      console.log("write ss A");
-      arm.emit('status', "R");
-      c_status = true;
-    }else if(oxy_v > 12 && s_status == true) {
-      portC.write ("I\n");
-      console.log("write ss I");
-      arm.emit('status', "S");
-      c_status = false;
-    }
-    arm.emit('feedback', data + " ");
-  }
-});
-portR.on('readable', function () {
-    console.log('Data:', port.read());
-});
 setInterval(function () {
-  if (s_status == false) {
-    arm.emit('control_status', "F");
+  if (status_control == false) {
+    arm.emit('server_control_status', "F");
   }else {
-    arm.emit('control_status', "T");
+    arm.emit('server_control_status', "T");
   }
-  if (c_status == false) {
-    arm.emit('status', "S");
+  if (status_cerrent == false) {
+    arm.emit('server_status', "S");
   } else {
-    arm.emit('status', "R");
+    arm.emit('server_status', "R");
   }
-console.log(s_status);
+console.log(status_control);
 }, 5000);
 arm.on('disconnect', function(){});
 
