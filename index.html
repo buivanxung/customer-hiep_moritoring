@@ -72,12 +72,12 @@
             $('#mode').html("Tự động");
             $("input[name='run']").attr("disabled", "disabled");
             $("input[name='stop']").attr("disabled", "disabled");
-            $("input[name='manual']").attr('Bằng Tay', 'Save');
+            $("input[name='manual']").val('Bằng Tay');
           } else {
             $('#mode').html("Điều khiển bằng tay");
             $("input[name='run']").removeAttr("disabled");
             $("input[name='stop']").removeAttr("disabled");
-              $("input[name='manual']").attr('Tự động', 'Save');
+              $("input[name='manual']").val('Tự động');
           }
         }, 1000);
         setInterval(function () {
