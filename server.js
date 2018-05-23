@@ -22,10 +22,10 @@ io.on('connection', function (socket) {
   // Status  == true then automation else manual
   socket.on('server_web_control', function(data) {
       if (data == "R" && s_status == false) {
-        socket.emit('server_status', "R");
+        socket.broadcast.emit('server_status', "R");
         c_status = true;
       } else if (data == "S" && s_status == false){
-        socket.emit('server_status', "S");
+        socket.broadcast.emit('server_status', "S");
         c_status = false;
       }
       console.log(data);
@@ -39,8 +39,8 @@ io.on('connection', function (socket) {
 	       console.log(" "+ data);
       });
   socket.on('feedback', function(data) {
-          socket.emit('server_feedback',data);
-          console.log("R"+ data);
+      socket.broadcast.emit('server_feedback', data);
+      console.log("R"+ data);
       });
   setInterval(function () {
     if (s_status == false) {
