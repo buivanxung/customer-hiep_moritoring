@@ -49,12 +49,15 @@
           console.log(res);
 				});
         socket.on('status', function(data) {
-          if (data == "R") {
+          if (data == "R" ) {
             $('#status').html("Máy Đang Bơm");
+          } else if (data == "S" ) {
+            $('#status').html("Máy Đang Tắt");
+          }
+          if (data == "R" && r_status == false) {
             $("input[name='run']").attr("disabled", "disabled");
             $("input[name='stop']").removeAttr("disabled");
-          } else if (data == "S") {
-            $('#status').html("Máy Đang Tắt");
+          } else if (data == "S" && r_status == false) {
             $("input[name='stop']").attr("disabled", "disabled");
             $("input[name='run']").removeAttr("disabled");
           }
@@ -74,8 +77,6 @@
         setInterval(function () {
           if (r_status == true) {
             $('#mode').html("Tự động");
-            $("input[name='run']").attr("disabled", "disabled");
-            $("input[name='stop']").attr("disabled", "disabled");
             $("input[name='manual']").val('Bằng Tay');
           } else {
             $('#mode').html("Điều khiển bằng tay");
