@@ -20,7 +20,7 @@ var c_status = false;
 io.on('connection', function (socket) {
   console.log("New connection");
   // Status  == true then automation else manual
-  socket.on('web_control', function(data) {
+  socket.on('server_web_control', function(data) {
       if (data == "R" && s_status == false) {
         socket.emit('server_status', "R");
         c_status = true;
@@ -29,7 +29,7 @@ io.on('connection', function (socket) {
         c_status = false;
       }
     });
-    socket.on('web_status', function(data) {
+    socket.on('server_web_status', function(data) {
         if (data == "A") {
           s_status = true;
         } else if (data == "M"){
