@@ -119,18 +119,7 @@ io.on('connection', function (socket) {
     }
 	console.log(status_control);
   }, 5000);
-  portC.on('error', function(err) {
-  console.log('Error: ', err.message);
-  })
-  portR.on('error', function(err) {
-  console.log('Error: ', err.message);
-  })
-});
 
-
-// server_status chi trang thai dang running hay stopping
-arm.on('connect', function(){
-  console.log("Connect to Server!");
   setInterval(function () {
     if (status_control == false) {
       arm.emit('server_control_status', "F");
@@ -144,6 +133,18 @@ arm.on('connect', function(){
     }
   console.log("C" +status_control);
   }, 5000);
+  portC.on('error', function(err) {
+  console.log('Error: ', err.message);
+  })
+  portR.on('error', function(err) {
+  console.log('Error: ', err.message);
+  })
+});
+
+
+// server_status chi trang thai dang running hay stopping
+arm.on('connect', function(){
+  console.log("Connect to Server!");
 });
 arm.on('server_web_control', function(data) {
     if (data == "R" && status_control == false) {
