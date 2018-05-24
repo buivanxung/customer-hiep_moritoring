@@ -44,14 +44,14 @@ io.on('connection', function (socket) {
       });
   setInterval(function () {
     if (s_status == false) {
-      socket.emit('server_control_status', "F");
+      socket.broadcast.emit('server_control_status', "F");
     }else {
-      socket.emit('server_control_status', "T");
+      socket.broadcast.emit('server_control_status', "T");
     }
     if (c_status == false) {
-      socket.emit('server_status', "S");
+      socket.broadcast.emit('server_status', "S");
     } else {
-      socket.emit('server_status', "R");
+      socket.broadcast.emit('server_status', "R");
     }
 	console.log(s_status);
   }, 5000);
