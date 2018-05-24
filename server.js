@@ -131,6 +131,19 @@ io.on('connection', function (socket) {
 // server_status chi trang thai dang running hay stopping
 arm.on('connect', function(){
   console.log("Connect to Server!");
+  setInterval(function () {
+    if (status_control == false) {
+      arm.emit('server_control_status', "F");
+    }else {
+      arm.emit('server_control_status', "T");
+    }
+    if (status_cerrent == false) {
+      arm.emit('server_status', "S");
+    } else {
+      arm.emit('server_status', "R");
+    }
+  console.log("C" +status_control);
+  }, 5000);
 });
 arm.on('server_web_control', function(data) {
     if (data == "R" && status_control == false) {
@@ -154,19 +167,7 @@ arm.on('server_web_control', function(data) {
       }
      console.log(" "+ data);
     });
-setInterval(function () {
-  if (status_control == false) {
-    arm.emit('server_control_status', "F");
-  }else {
-    arm.emit('server_control_status', "T");
-  }
-  if (status_cerrent == false) {
-    arm.emit('server_status', "S");
-  } else {
-    arm.emit('server_status', "R");
-  }
-console.log("C" +status_control);
-}, 5000);
+
 arm.on('disconnect', function(){});
 
 http.listen(5000, function () {
