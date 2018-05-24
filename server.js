@@ -53,7 +53,7 @@ io.on('connection', function (socket) {
     } else {
       socket.broadcast.emit('server_status', "R");
     }
-	console.log(s_status);
+	console.log("request " +s_status);
   }, 5000);
 });
 http.listen(5000, function () {
