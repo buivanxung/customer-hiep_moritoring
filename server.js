@@ -144,6 +144,7 @@ arm.on('server_web_control', function(data) {
       arm.emit('server_status', "S");
       status_cerrent = false;
     }
+    console.log(data);
   });
   arm.on('server_web_status', function(data) {
       if (data == "A") {
