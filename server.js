@@ -136,12 +136,12 @@ arm.on('server_web_control', function(data) {
     if (data == "R" && status_control == false) {
       portC.write ("A\n");
       console.log("write ss A");
-      arm.emit('server_status', "R");
+      arm.broadcast.emit('server_status', "R");
       status_cerrent = true;
     } else if (data == "S" && status_control == false){
       portC.write ("I\n");
       console.log("write ss I");
-      arm.emit('server_status', "S");
+      arm.broadcast.emit('server_status', "S");
       status_cerrent = false;
     }
     console.log(data);
@@ -156,14 +156,14 @@ arm.on('server_web_control', function(data) {
     });
 setInterval(function () {
   if (status_control == false) {
-    arm.emit('server_control_status', "F");
+    arm.broadcast.emit('server_control_status', "F");
   }else {
-    arm.emit('server_control_status', "T");
+    arm.broadcast.emit('server_control_status', "T");
   }
   if (status_cerrent == false) {
-    arm.emit('server_status', "S");
+    arm.broadcast.emit('server_status', "S");
   } else {
-    arm.emit('server_status', "R");
+    arm.broadcast.emit('server_status', "R");
   }
 console.log(status_control);
 }, 5000);
