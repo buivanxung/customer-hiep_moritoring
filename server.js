@@ -33,10 +33,10 @@ io.on('connection', function (socket) {
   socket.on('server_web_status', function(data) {
         if (data == "A") {
           status_control = true;
-          socket.emit('servertoweb_status', "A");
+          socket.broadcast.emit('servertoweb_status', "A");
         } else if (data == "M"){
           status_control = false;
-          socket.emit('servertoweb_status', "M");
+          socket.broadcast.emit('servertoweb_status', "M");
         }
 	       console.log(" "+ data);
       });
