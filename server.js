@@ -152,7 +152,7 @@ arm.on('server_web_control', function(data) {
       } else if (data == "M"){
         status_control = false;
       }
- console.log(" "+ data);
+     console.log(" "+ data);
     });
 setInterval(function () {
   if (status_control == false) {
@@ -165,7 +165,7 @@ setInterval(function () {
   } else {
     arm.emit('server_status', "R");
   }
-console.log(status_control);
+console.log("C" +status_control);
 }, 5000);
 arm.on('disconnect', function(){});
 
