@@ -119,20 +119,6 @@ io.on('connection', function (socket) {
     }
 	console.log(status_control);
   }, 5000);
-
-  setInterval(function () {
-    if (status_control == false) {
-      arm.emit('server_control_status', "F");
-    }else {
-      arm.emit('server_control_status', "T");
-    }
-    if (status_cerrent == false) {
-      arm.emit('server_status', "S");
-    } else {
-      arm.emit('server_status', "R");
-    }
-  console.log("C" +status_control);
-  }, 5000);
   portC.on('error', function(err) {
   console.log('Error: ', err.message);
   })
@@ -168,7 +154,19 @@ arm.on('server_web_control', function(data) {
       }
      console.log(" "+ data);
     });
-
+    setInterval(function () {
+      if (status_control == false) {
+        arm.emit('server_control_status', "F");
+      }else {
+        arm.emit('server_control_status', "T");
+      }
+      if (status_cerrent == false) {
+        arm.emit('server_status', "S");
+      } else {
+        arm.emit('server_status', "R");
+      }
+    console.log("C " + status_control);
+    }, 5000);
 arm.on('disconnect', function(){});
 
 http.listen(5000, function () {
