@@ -15,45 +15,61 @@ app.get('/',function(req,res){
     res.render('index', { title: 'Moritoring' });
 })
 
-var s_status = false;
-var c_status = false;
+var status_control = false;
+var status_cerrent = false;
 io.on('connection', function (socket) {
   console.log("New connection");
   // Status  == true then automation else manual
   socket.on('server_web_control', function(data) {
-      if (data == "R" && s_status == false) {
-        socket.broadcast.emit('server_status', "R");
-        c_status = true;
-      } else if (data == "S" && s_status == false){
-        socket.broadcast.emit('server_status', "S");
-        c_status = false;
+      if (data == "R" && status_control == false) {
+        socket.broadcast.emit('webtoserver_control', "R");
+        status_cerrent = true;
+      } else if (data == "S" && status_control == false){
+        socket.broadcast.emit('webtoserver_control', "S");
+        status_cerrent = false;
       }
       console.log(data);
     });
   socket.on('server_web_status', function(data) {
         if (data == "A") {
-          s_status = true;
+          status_control = true;
         } else if (data == "M"){
-          s_status = false;
+          status_control = false;
         }
 	       console.log(" "+ data);
+      });
+  socket.on('server_control_status', function(data) {
+        if (data == "T") {
+          status_control = true;
+        } else if (data == "F"){
+          status_control = false;
+        }
+         console.log(" "+ data);
+      });
+  socket.on('server_status', function(data) {
+        if (data == "R") {
+          status_cerrent = true;
+        } else if (data == "S"){
+          status_cerrent = false;
+        }
+         console.log(" "+ data);
       });
   socket.on('feedback', function(data) {
       socket.broadcast.emit('server_feedback', data);
       console.log("R"+ data);
       });
   setInterval(function () {
-    if (s_status == false) {
+    if (status_control == false) {
       socket.broadcast.emit('server_control_status', "F");
     }else {
       socket.broadcast.emit('server_control_status', "T");
     }
-    if (c_status == false) {
+    if (status_cerrent == false) {
       socket.broadcast.emit('server_status', "S");
     } else {
       socket.broadcast.emit('server_status', "R");
     }
-	console.log("request " +s_status);
+	console.log("request " +status_control);
   }, 5000);
 });
 http.listen(5000, function () {
