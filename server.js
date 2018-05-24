@@ -131,7 +131,7 @@ io.on('connection', function (socket) {
 arm.on('connect', function(){
   console.log("Connect to Server!");
 });
-arm.on('server_web_control', function(data) {
+arm.on('webtoserver_control', function(data) {
     if (data == "R" && status_control == false) {
       portC.write ("A\n");
       console.log("write ss A");
@@ -145,7 +145,7 @@ arm.on('server_web_control', function(data) {
     }
     console.log(data);
   });
-  arm.on('server_web_status', function(data) {
+  arm.on('servertoweb_status', function(data) {
       if (data == "A") {
         status_control = true;
       } else if (data == "M"){
