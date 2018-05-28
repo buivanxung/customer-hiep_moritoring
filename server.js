@@ -184,6 +184,8 @@ function f_postData() {
     if (!error && response.statusCode == 200) {
         // Print out the response body
         console.log("Post success!")
+    }else {
+      console.log("Request data fail");
     }
     console.log(postData);
   })
