@@ -18,13 +18,13 @@ var headers = {
     'User-Agent':       'Super Agent/0.0.1',
     'Content-Type':     'application/x-www-form-urlencoded'
 }
-
+var temperature, ph, conductivity, oxy_v, batery;
 
 var options = {
-    url: 'demo.phadistribution.com:80',
+    url: 'demo.phadistribution.com:80/parser_data_for_waspmote.php',
     method: 'POST',
     headers: headers,
-    form: postData
+    form: {'wasp_id': 'POSD', 'BAT': batery, 'WT':temperature, 'PH': ph, 'DO': oxy_v, 'ORP': '0', 'COND': conductivity, 'P_H2S':'0', 'ALKA': '0', 'TURB': '0', 'view' :'html'}
 }
 
 
@@ -102,11 +102,11 @@ io.on('connection', function (socket) {
     if (check.length > 36) {
       var raw = check.split(",")
       var oxy = raw[2].split("=");
-      var oxy_v = oxy[1];
-      var temperature = raw[0].split("=");
-      var conductivity = raw[1].split("=");
-      var ph = raw[3].split("=");
-      var batery = raw[4].split("=");
+      oxy_v = oxy[1];
+      temperature = raw[0].split("=");
+      conductivity = raw[1].split("=");
+      ph = raw[3].split("=");
+      batery = raw[4].split("=");
       if (oxy_v < 9 && status_control == true) {
         portC.write ("A\n");
         console.log("write ss A");
