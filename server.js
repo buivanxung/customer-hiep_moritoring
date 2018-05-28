@@ -101,6 +101,10 @@ io.on('connection', function (socket) {
       var raw = check.split(",")
       var oxy = raw[2].split("=");
       var oxy_v = oxy[1];
+      var temperature = raw[0].split("=");
+      var conductivity = raw[1].split("=");
+      var ph = raw[3].split("=");
+      var batery = raw[4].split("=");
       if (oxy_v < 9 && status_control == true) {
         portC.write ("A\n");
         console.log("write ss A");
@@ -114,7 +118,7 @@ io.on('connection', function (socket) {
       }
       socket.emit('feedback', data + " ");
       arm.emit('feedback', data + " ");
-      postData ="/parser_data_for_waspmote.php?wasp_id=POC1&BAT="+raw[4]+"&WT="+raw[0]+"&PH="+raw[3]+"&DO="+raw[2]+"&ORP=0&COND="+raw[1]+"&GP_H2S=0&ALKA=0&TURB=0&view=html";
+      postData ="/parser_data_for_waspmote.php?wasp_id=POC1&BAT="+batery[1]+"&WT="+temperature[1]+"&PH="+ph[1]+"&DO="+oxy_v+"&ORP=0&COND="+conductivity[1]+"&GP_H2S=0&ALKA=0&TURB=0&view=html";
       f_postData();
     }
   });
