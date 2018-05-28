@@ -120,7 +120,6 @@ io.on('connection', function (socket) {
       }
       socket.emit('feedback', data + " ");
       arm.emit('feedback', data + " ");
-      postData ="/parser_data_for_waspmote.php?wasp_id=POC1&BAT="+batery[1]+"&WT="+temperature[1]+"&PH="+ph[1]+"&DO="+oxy_v+"&ORP=0&COND="+conductivity[1]+"&GP_H2S=0&ALKA=0&TURB=0&view=html";
       f_postData();
     }
   });
