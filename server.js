@@ -10,6 +10,22 @@ app.use(express.static(__dirname + '/'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/');
 
+var http_server = require('http');
+
+var postData = "";
+
+var options = {
+    hostname: 'demo.phadistribution.com',
+    port: 80,
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': postData.length
+    },
+    form: {postData}
+};
+
+
 var arm = require('socket.io-client')('http://103.15.51.143:5000/');
 
 var serialport = require("serialport");
@@ -81,7 +97,7 @@ io.on('connection', function (socket) {
     console.log('R:', "" +data);
     var check = " " + data;
     console.log(check.length);
-    if (check.length > 30) {
+    if (check.length > 36) {
       var raw = check.split(",")
       var oxy = raw[2].split("=");
       var oxy_v = oxy[1];
@@ -98,6 +114,8 @@ io.on('connection', function (socket) {
       }
       socket.emit('feedback', data + " ");
       arm.emit('feedback', data + " ");
+      postData ="/parser_data_for_waspmote.php?wasp_id=POC1&BAT="+raw[4]+"&WT="+raw[0]+"&PH="+raw[3]+"&DO="+raw[2]+"&ORP=0&COND="+raw[1]+"&GP_H2S=0&ALKA=0&TURB=0&view=html";
+      function f_postData();
     }
   });
   portR.on('readable', function () {
@@ -155,6 +173,19 @@ arm.on('webtoserver_control', function(data) {
     });
 arm.on('disconnect', function(){});
 
+function f_postData() {
+  http_server(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        // Print out the response body
+        console.log(body)
+    }
+  })
+}
+
 http.listen(5000, function () {
   console.log("Server running");
 });
+
+function postData(data) {
+
+}
