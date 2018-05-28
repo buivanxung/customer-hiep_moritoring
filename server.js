@@ -179,6 +179,7 @@ function f_postData() {
         // Print out the response body
         console.log("Post success!")
     }
+    console.log(postData);
   })
 }
 
