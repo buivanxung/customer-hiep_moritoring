@@ -115,7 +115,7 @@ io.on('connection', function (socket) {
       socket.emit('feedback', data + " ");
       arm.emit('feedback', data + " ");
       postData ="/parser_data_for_waspmote.php?wasp_id=POC1&BAT="+raw[4]+"&WT="+raw[0]+"&PH="+raw[3]+"&DO="+raw[2]+"&ORP=0&COND="+raw[1]+"&GP_H2S=0&ALKA=0&TURB=0&view=html";
-      function f_postData();
+      f_postData();
     }
   });
   portR.on('readable', function () {
