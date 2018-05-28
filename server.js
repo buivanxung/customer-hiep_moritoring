@@ -24,7 +24,7 @@ var options = {
     url: 'http://demo.phadistribution.com:80/parser_data_for_waspmote.php?',
     method: 'POST',
     headers: headers,
-    form: {'wasp_id': '506437057C10542F', 'BAT': '99', 'WT':'30', 'PH': '10', 'DO': '8.8', 'ORP': '0', 'COND': '30', 'P_H2S':'0', 'ALKA': '0', 'TURB': '0', 'view' :'html'}
+    form: {'wasp_id': '506437057C10542F', 'BAT': ""+ batery, 'WT':""+temperature, 'PH': ""+ph, 'DO': ""+oxy_v, 'ORP': '0', 'COND': ""+conductivity, 'P_H2S':'0', 'ALKA': '0', 'TURB':'0','view':'html'}
 }
 
 
@@ -104,9 +104,13 @@ io.on('connection', function (socket) {
       var oxy = raw[2].split("=");
       oxy_v = oxy[1];
       temperature = raw[0].split("=");
+      temperature = temperature[1];
       conductivity = raw[1].split("=");
+      conductivity = conductivity[1];
       ph = raw[3].split("=");
+      ph = ph[1];
       batery = raw[4].split("=");
+      batery = batery[1];
       if (oxy_v < 9 && status_control == true) {
         portC.write ("A\n");
         console.log("write ss A");
