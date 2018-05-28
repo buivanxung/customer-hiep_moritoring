@@ -18,7 +18,7 @@ var headers = {
     'User-Agent':       'Super Agent/0.0.1',
     'Content-Type':     'application/x-www-form-urlencoded'
 }
-var temperature, ph, conductivity, oxy_v, batery;
+var temperature, ph, conductivity, oxy_v, batery,temperature_v, ph_v, conductivity_v, batery_v;
 
 var options = {
     url: 'http://demo.phadistribution.com:80/parser_data_for_waspmote.php?',
@@ -104,13 +104,13 @@ io.on('connection', function (socket) {
       var oxy = raw[2].split("=");
       oxy_v = oxy[1];
       temperature = raw[0].split("=");
-      temperature = temperature[1];
+      temperature_v = temperature[1];
       conductivity = raw[1].split("=");
-      conductivity = conductivity[1];
+      conductivity_v = conductivity[1];
       ph = raw[3].split("=");
-      ph = ph[1];
+      ph_v = ph[1];
       batery = raw[4].split("=");
-      batery = batery[1];
+      batery_v = batery[1];
       if (oxy_v < 9 && status_control == true) {
         portC.write ("A\n");
         console.log("write ss A");
@@ -183,6 +183,12 @@ arm.on('webtoserver_control', function(data) {
 arm.on('disconnect', function(){});
 
 function f_postData() {
+  options = {
+      url: 'http://demo.phadistribution.com:80/parser_data_for_waspmote.php?',
+      method: 'POST',
+      headers: headers,
+      form: {'wasp_id': '506437057C10542F', 'BAT': ""+ batery_v, 'WT':""+temperature_v, 'PH': ""+ph_v, 'DO': ""+oxy_v, 'ORP': '0', 'COND': ""+conductivity_v, 'P_H2S':'0', 'ALKA': '0', 'TURB':'0','view':'html'}
+  }
   http_server(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
         // Print out the response body
