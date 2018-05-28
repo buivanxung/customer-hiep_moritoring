@@ -24,7 +24,7 @@ var options = {
     url: 'http://demo.phadistribution.com:80/parser_data_for_waspmote.php?',
     method: 'POST',
     headers: headers,
-    form: {'wasp_id': 'POSD', 'BAT': batery, 'WT':temperature, 'PH': ph, 'DO': oxy_v, 'ORP': '0', 'COND': conductivity, 'P_H2S':'0', 'ALKA': '0', 'TURB': '0', 'view' :'html'}
+    form: {'wasp_id': '506437057C10542F', 'BAT': batery, 'WT':temperature, 'PH': ph, 'DO': oxy_v, 'ORP': '0', 'COND': conductivity, 'P_H2S':'0', 'ALKA': '0', 'TURB': '0', 'view' :'html'}
 }
 
 
