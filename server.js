@@ -21,7 +21,7 @@ var headers = {
 var temperature, ph, conductivity, oxy_v, batery;
 
 var options = {
-    url: 'demo.phadistribution.com:80/parser_data_for_waspmote.php',
+    url: 'http://demo.phadistribution.com:80/parser_data_for_waspmote.php?',
     method: 'POST',
     headers: headers,
     form: {'wasp_id': 'POSD', 'BAT': batery, 'WT':temperature, 'PH': ph, 'DO': oxy_v, 'ORP': '0', 'COND': conductivity, 'P_H2S':'0', 'ALKA': '0', 'TURB': '0', 'view' :'html'}
@@ -185,7 +185,7 @@ function f_postData() {
         // Print out the response body
         console.log("Post success!")
     }else {
-      console.log("Request data fail");
+      console.log(response.statusCode);
     }
     console.log(postData);
   })
