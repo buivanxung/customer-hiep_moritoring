@@ -177,7 +177,7 @@ function f_postData() {
   http_server(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
         // Print out the response body
-        console.log(body)
+        console.log("Post success!")
     }
   })
 }
@@ -185,7 +185,3 @@ function f_postData() {
 http.listen(5000, function () {
   console.log("Server running");
 });
-
-function postData(data) {
-
-}
