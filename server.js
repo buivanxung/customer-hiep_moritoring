@@ -10,7 +10,7 @@ app.use(express.static(__dirname + '/'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/');
 
-var http_server = require('http');
+var http_server = require('request');
 
 var postData = "";
 
