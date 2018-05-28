@@ -14,16 +14,18 @@ var http_server = require('request');
 
 var postData = "";
 
+var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded'
+}
+
+
 var options = {
-    hostname: 'demo.phadistribution.com',
-    port: 80,
+    url: 'demo.phadistribution.com:80',
     method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': postData.length
-    },
-    form: {postData}
-};
+    headers: headers,
+    form: postData
+}
 
 
 var arm = require('socket.io-client')('http://103.15.51.143:5000/');
