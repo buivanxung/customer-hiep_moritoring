@@ -3,7 +3,7 @@
 <head>
     <!-- Required meta tags -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1>
     <title> Technology</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
@@ -136,16 +136,60 @@
        return true;
       }
     </script>
+    <style>
+* {
+  box-sizing: border-box;
+}
+.menu {
+  float: left;
+  width: 20%;
+}
+.menuitem {
+  padding: 8px;
+  margin-top: 7px;
+  border-bottom: 1px solid #f1f1f1;
+}
+.main {
+  float: left;
+  width: 60%;
+  padding: 0 20px;
+  overflow: hidden;
+}
+.right {
+  background-color: lightblue;
+  float: left;
+  width: 20%;
+  padding: 10px 15px;
+  margin-top: 7px;
+}
+
+@media only screen and (max-width:800px) {
+  /* For tablets: */
+  .main {
+    width: 80%;
+    padding: 0;
+  }
+  .right {
+    width: 100%;
+  }
+}
+@media only screen and (max-width:500px) {
+  /* For mobile phones: */
+  .menu, .main, .right {
+    width: 100%;
+  }
+}
+</style>
 </head>
-<body>
+<body style="font-family:Verdana;">
+  <div style="background-color:#f1f1f1;padding:15px; text-align: center;">
+    <label ><span><strong><font size = "100">Hệ thống điều khiển và giám sát từ xa</font></strong></span></label>
+</div>
 <div class="container-fluid pb-4 pt-4 paddding">
   <table>
     <tr>
       <table align="center" >
         <th>
-          <div>
-            <label ><span><strong><font size = "100">Trình trạng bơm</font></strong></span></label>
-          </div>
           <div  align="center">
             <label style="color:DodgerBlue;"><font size = "5"><span id="status"></font> </span></label>
           </div>
