@@ -12,7 +12,18 @@ app.set('views', __dirname + '/');
 
 var http_server = require('request');
 
-var postData = "";
+var maxTemp = 28;
+var minTemp = 24;
+var maxOxy = 10;
+var minOxy = 9;
+var maxCond = 35;
+var minCond = 28;
+var maxPh = 8;
+var minPh = 6.5;
+var ledOxy = true;
+var ledCond = true;
+var ledPh = true;
+var ledTemp = true;
 
 var headers = {
     'User-Agent':       'Super Agent/0.0.1',
@@ -111,12 +122,48 @@ io.on('connection', function (socket) {
       ph_v = ph[1];
       batery = raw[4].split("=");
       batery_v = batery[1];
-      if (oxy_v < 9 && status_control == true) {
+      if (oxy_v < minOxy && ledOxy == true) {
+        portC.write ("B\n");
+        console.log("write ss B");
+        ledOxy = false;
+      }else if (oxy_v > minOxy && ledOxy == false){
+        portC.write ("J\n");
+        console.log("write ss J");
+        ledOxy = true;
+      }
+      if (conductivity_v < minCond && ledCond == true) {
+        portC.write ("C\n");
+        console.log("write ss C");
+        ledCond = false;
+      }else if (conductivity_v > minCond && ledCond == false){
+        portC.write ("K\n");
+        console.log("write ss J");
+        ledCond = true;
+      }
+      if (temperature_v < minTemp && ledTemp == true) {
+        portC.write ("D\n");
+        console.log("write ss D");
+        ledTemp = false;
+      }else if (temperature_v > minTemp && ledTemp == false){
+        portC.write ("L\n");
+        console.log("write ss L");
+        ledTemp = true;
+      }
+      if (ph_v < minPh && ledPh == true) {
+        portC.write ("E\n");
+        console.log("write ss E");
+        ledPh = false;
+      }else if (ph_v > minPh && ledPh == false){
+        portC.write ("M\n");
+        console.log("write ss M");
+        ledPh = true;
+      }
+      if (oxy_v < minOxy && status_control == true) {
         portC.write ("A\n");
         console.log("write ss A");
         socket.emit('status', "R");
         status_cerrent = true;
-      }else if(oxy_v > 12 && status_control == true) {
+      }else if(oxy_v > maxOxy && status_control == true) {
         portC.write ("I\n");
         console.log("write ss I");
         socket.emit('status', "S");
