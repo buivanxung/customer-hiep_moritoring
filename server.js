@@ -243,7 +243,6 @@ function f_postData() {
     }else {
       console.log(response.statusCode);
     }
-    console.log(postData);
   })
 }
 
