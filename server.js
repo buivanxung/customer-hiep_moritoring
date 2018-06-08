@@ -12,14 +12,14 @@ app.set('views', __dirname + '/');
 
 var http_server = require('request');
 
-var maxTemp = 30;
-var minTemp = 26;
-var maxOxy = 10;
-var minOxy = 3;
-var maxCond = 35;
-var minCond = 28;
-var maxPh = 8.5;
-var minPh = 6.5;
+var maxTemp = 30.00;
+var minTemp = 26.00;
+var maxOxy = 10.00;
+var minOxy = 3.00;
+var maxCond = 35.00;
+var minCond = 28.00;
+var maxPh = 8.50;
+var minPh = 6.50;
 var ledOxy = true;
 var ledCond = true;
 var ledPh = true;
