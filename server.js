@@ -132,7 +132,7 @@ io.on('connection', function (socket) {
         console.log("write ss J");
         ledStatus = true;
       }
-      if (conductivity_v < minCond && ledStatusd == true) {
+      if (conductivity_v < minCond && ledStatus == true) {
         portC.write ("C\n");
         console.log("write ss C");
         ledStatus = false;
