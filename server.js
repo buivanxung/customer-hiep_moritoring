@@ -160,7 +160,7 @@ io.on('connection', function (socket) {
       //   ledStatus = true;
       // }
       // ||ph_v > minPh || temperature_v > minTemp ||oxy_v > minOxy || conductivity_v > minCond
-      if (ph_v < minPh || temperature_v < minTemp ||oxy_v < minOxy || conductivity_v < minCond ) {
+      if (ph_v < minPh || temperature_v < minTemp || oxy_v < minOxy || conductivity_v < minCond || ph_v > maxPh || temperature_v > maxTemp ||oxy_v > maxOxy || conductivity_v > maxCond) {
         console.log("Check OK");
         if (ledStatus == true) {
           portC.write ("C\n");
