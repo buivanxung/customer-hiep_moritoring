@@ -159,7 +159,8 @@ io.on('connection', function (socket) {
       //   console.log("write ss M");
       //   ledStatus = true;
       // }
-      if (ph_v < minPh || temperature_v < minTemp ||oxy_v < minOxy || conductivity_v < minCond ||ph_v > minPh || temperature_v > minTemp ||oxy_v > minOxy || conductivity_v > minCond) {
+      // ||ph_v > minPh || temperature_v > minTemp ||oxy_v > minOxy || conductivity_v > minCond
+      if (ph_v < minPh || temperature_v < minTemp ||oxy_v < minOxy || conductivity_v < minCond ) {
         console.log("Check OK");
         if (ledStatus == true) {
           portC.write ("C\n");
