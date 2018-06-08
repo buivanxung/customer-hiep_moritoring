@@ -123,41 +123,52 @@ io.on('connection', function (socket) {
       ph_v = ph[1];
       batery = raw[4].split("=");
       batery_v = batery[1];
-      if (oxy_v < minOxy && ledStatus == true) {
-        portC.write ("C\n");
-        console.log("write ss B");
-        ledStatus = false;
-      }else if (oxy_v > minOxy && ledStatus == false){
-        portC.write ("K\n");
-        console.log("write ss J");
-        ledStatus = true;
-      }
-      if (conductivity_v < minCond && ledStatus == true) {
-        portC.write ("C\n");
-        console.log("write ss C");
-        ledStatus = false;
-      }else if (conductivity_v > minCond && ledStatus == false){
-        portC.write ("K\n");
-        console.log("write ss J");
-        ledStatus = true;
-      }
-      if (temperature_v < minTemp && ledStatus == true) {
-        portC.write ("C\n");
-        console.log("write ss D");
-        ledStatus = false;
-      }else if (temperature_v > minTemp && ledStatus == false){
-        portC.write ("K\n");
-        console.log("write ss L");
-        ledStatus = true;
-      }
-      if (ph_v < minPh && ledStatus == true) {
-        portC.write ("C\n");
-        console.log("write ss E");
-        ledStatus = false;
-      }else if (ph_v > minPh && ledStatus == false){
-        portC.write ("K\n");
-        console.log("write ss M");
-        ledStatus = true;
+      // if (oxy_v < minOxy && ledStatus == true) {
+      //   portC.write ("C\n");
+      //   console.log("write ss B");
+      //   ledStatus = false;
+      // }else if (oxy_v > minOxy && ledStatus == false){
+      //   portC.write ("K\n");
+      //   console.log("write ss J");
+      //   ledStatus = true;
+      // }
+      // if (conductivity_v < minCond && ledStatus == true) {
+      //   portC.write ("C\n");
+      //   console.log("write ss C");
+      //   ledStatus = false;
+      // }else if (conductivity_v > minCond && ledStatus == false){
+      //   portC.write ("K\n");
+      //   console.log("write ss J");
+      //   ledStatus = true;
+      // }
+      // if (temperature_v < minTemp && ledStatus == true) {
+      //   portC.write ("C\n");
+      //   console.log("write ss D");
+      //   ledStatus = false;
+      // }else if (temperature_v > minTemp && ledStatus == false){
+      //   portC.write ("K\n");
+      //   console.log("write ss L");
+      //   ledStatus = true;
+      // }
+      // if (ph_v < minPh && ledStatus == true) {
+      //   portC.write ("C\n");
+      //   console.log("write ss E");
+      //   ledStatus = false;
+      // }else if (ph_v > minPh && ledStatus == false){
+      //   portC.write ("K\n");
+      //   console.log("write ss M");
+      //   ledStatus = true;
+      // }
+      if (ph_v < minPh || temperature_v < minTemp ||oxy_v < minOxy || conductivity_v < minCond ||ph_v > minPh || temperature_v > minTemp ||oxy_v > minOxy || conductivity_v > minCond) {
+        if (ledStatus == true) {
+          portC.write ("C\n");
+          ledStatus = false;
+        }
+      } else {
+        if (ledStatus == false) {
+          portC.write ("K\n");
+          ledStatus = true;
+        }
       }
       if (oxy_v < minOxy && status_control == true) {
         portC.write ("A\n");
