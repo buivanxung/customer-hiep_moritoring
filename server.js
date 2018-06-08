@@ -124,7 +124,7 @@ io.on('connection', function (socket) {
       batery = raw[4].split("=");
       batery_v = batery[1];
       if (oxy_v < minOxy && ledStatus == true) {
-        portC.write ("B\n");
+        portC.write ("C\n");
         console.log("write ss B");
         ledStatus = false;
       }else if (oxy_v > minOxy && ledStatus == false){
@@ -133,7 +133,7 @@ io.on('connection', function (socket) {
         ledStatus = true;
       }
       if (conductivity_v < minCond && ledStatus == true) {
-        portC.write ("B\n");
+        portC.write ("C\n");
         console.log("write ss C");
         ledStatus = false;
       }else if (conductivity_v > minCond && ledStatus == false){
@@ -142,7 +142,7 @@ io.on('connection', function (socket) {
         ledStatus = true;
       }
       if (temperature_v < minTemp && ledStatus == true) {
-        portC.write ("B\n");
+        portC.write ("C\n");
         console.log("write ss D");
         ledStatus = false;
       }else if (temperature_v > minTemp && ledStatus == false){
@@ -151,7 +151,7 @@ io.on('connection', function (socket) {
         ledStatus = true;
       }
       if (ph_v < minPh && ledStatus == true) {
-        portC.write ("B\n");
+        portC.write ("C\n");
         console.log("write ss E");
         ledStatus = false;
       }else if (ph_v > minPh && ledStatus == false){
