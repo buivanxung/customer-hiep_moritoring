@@ -12,10 +12,10 @@ app.set('views', __dirname + '/');
 
 var http_server = require('request');
 
-var maxTemp = 28;
-var minTemp = 24;
+var maxTemp = 30;
+var minTemp = 26;
 var maxOxy = 10;
-var minOxy = 9;
+var minOxy = 3;
 var maxCond = 35;
 var minCond = 28;
 var maxPh = 8;
@@ -24,6 +24,7 @@ var ledOxy = true;
 var ledCond = true;
 var ledPh = true;
 var ledTemp = true;
+var ledStatus = true;
 
 var headers = {
     'User-Agent':       'Super Agent/0.0.1',
@@ -122,41 +123,41 @@ io.on('connection', function (socket) {
       ph_v = ph[1];
       batery = raw[4].split("=");
       batery_v = batery[1];
-      if (oxy_v < minOxy && ledOxy == true) {
-        portC.write ("B\n");
-        console.log("write ss B");
-        ledOxy = false;
-      }else if (oxy_v > minOxy && ledOxy == false){
-        portC.write ("J\n");
-        console.log("write ss J");
-        ledOxy = true;
-      }
-      if (conductivity_v < minCond && ledCond == true) {
+      if (oxy_v < minOxy && ledStatus == true) {
         portC.write ("C\n");
-        console.log("write ss C");
-        ledCond = false;
-      }else if (conductivity_v > minCond && ledCond == false){
+        console.log("write ss B");
+        ledStatus = false;
+      }else if (oxy_v > minOxy && ledStatus == false){
         portC.write ("K\n");
         console.log("write ss J");
-        ledCond = true;
+        ledStatus = true;
       }
-      if (temperature_v < minTemp && ledTemp == true) {
-        portC.write ("D\n");
+      if (conductivity_v < minCond && ledStatusd == true) {
+        portC.write ("C\n");
+        console.log("write ss C");
+        ledStatus = false;
+      }else if (conductivity_v > minCond && ledStatus == false){
+        portC.write ("K\n");
+        console.log("write ss J");
+        ledStatus = true;
+      }
+      if (temperature_v < minTemp && ledStatus == true) {
+        portC.write ("C\n");
         console.log("write ss D");
-        ledTemp = false;
-      }else if (temperature_v > minTemp && ledTemp == false){
-        portC.write ("L\n");
+        ledStatus = false;
+      }else if (temperature_v > minTemp && ledStatus == false){
+        portC.write ("K\n");
         console.log("write ss L");
-        ledTemp = true;
+        ledStatus = true;
       }
-      if (ph_v < minPh && ledPh == true) {
-        portC.write ("E\n");
+      if (ph_v < minPh && ledStatus == true) {
+        portC.write ("C\n");
         console.log("write ss E");
-        ledPh = false;
-      }else if (ph_v > minPh && ledPh == false){
-        portC.write ("M\n");
+        ledStatus = false;
+      }else if (ph_v > minPh && ledStatus == false){
+        portC.write ("K\n");
         console.log("write ss M");
-        ledPh = true;
+        ledStatus = true;
       }
       if (oxy_v < minOxy && status_control == true) {
         portC.write ("A\n");
