@@ -48,6 +48,12 @@ io.on('connection', function (socket) {
         }
          console.log(" "+ data);
       });
+  socket.on('server_update', function(data) {
+        socket.broadcast.emit('server_update_web', data);
+      });
+  socket.on('web_update', function(data) {
+        socket.broadcast.emit('update', data);
+      });
   socket.on('server_status', function(data) {
         if (data == "R") {
           status_cerrent = true;
