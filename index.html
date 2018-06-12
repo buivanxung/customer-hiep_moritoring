@@ -8,6 +8,7 @@
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/modernizr-3.5.0.min.js"></script>
     <script src="js/jquery-1.12.4.js"></script>
     <script src="js/jquery-ui.js"></script>
@@ -16,7 +17,9 @@
     <script type="text/javascript">
     var socket;
     var c_connect = true;
-	var r_status = true;
+	  var r_status = true;
+    var maxTemp=0,minTemp=0,maxCond=0,minCond=0,maxOxy=0,minOxy=0,maxPH=0,minPH=0;
+    var imaxTemp='',iminTemp='',imaxCond='',iminCond='',imaxOxy='',iminOxy='',imaxPH='',iminPH='';
     $(document).ready(function()
       {
         $('#temp1').html("0 oC");
@@ -95,6 +98,48 @@
           $('#O').html(nO[1]+ "-" + xO[1]);
           $('#P').html(nP[1]+ "-" + xP[1]);
         });
+
+        $('input').on('click', function() {
+         imaxTemp = $('#maxTemp').val();
+         if (imaxTemp < 1 || imaxTemp > 100 || numberSample == '') {
+           $('#status_sample').html("Sample Number Over Range Scope!");
+           $('#numberSample').val() = 4;
+         }else {
+           $('#status_sample').html('');
+         }
+         numberTime = $('#numberTime').val();
+         if (numberTime < 0 || numberTime > 500 || numberTime == '') {
+           $('#status_time').html("Time Measuring Over Range Scope!");
+           $('#numberTime').val() = 60;
+         }else {
+           $('#status_time').html('');
+         }
+         if (numberSample == 1) {
+           $("input[name='sample_1']").prop("disabled", false);
+           $("input[name='sample_2']").prop("disabled", true);
+           $("input[name='sample_3']").prop("disabled", true);
+           $("input[name='sample_4']").prop("disabled", true);
+         } else if (numberSample == 2) {
+           $("input[name='sample_1']").prop("disabled", false);
+           $("input[name='sample_2']").prop("disabled", false);
+           $("input[name='sample_3']").prop("disabled", true);
+           $("input[name='sample_4']").prop("disabled", true);
+         }else if (numberSample == 3) {
+           $("input[name='sample_1']").prop("disabled", false);
+           $("input[name='sample_2']").prop("disabled", false);
+           $("input[name='sample_3']").prop("disabled", false);
+           $("input[name='sample_4']").prop("disabled", true);
+         }else if (numberSample == 4 ) {
+           $("input[name='sample_1']").prop("disabled", false);
+           $("input[name='sample_2']").prop("disabled", false);
+           $("input[name='sample_3']").prop("disabled", false);
+           $("input[name='sample_4']").prop("disabled", false);
+         }else {
+           $("input[name='sample_1']").prop("disabled", true);
+           $("input[name='sample_2']").prop("disabled", true);
+           $("input[name='sample_3']").prop("disabled", true);
+           $("input[name='sample_4']").prop("disabled", true);
+         }
         setInterval(function () {
           if (r_status == true) {
             $('#mode').html("Mode: Tự động");
@@ -213,7 +258,7 @@
 </head>
 <body style="font-family:Verdana;">
   <div style="background-color:#f1f1f1;padding:15px; text-align: center;">
-    <label ><span><strong><font size = "100">Hệ thống điều khiển và giám sát từ xa</font></strong></span></label>
+    <label ><span><strong><font size = "7">HỆ THỐNG ĐIỀU KHIỂN VÀ GIÁM SÁT CHẤT LƯỢNG NƯỚC THỦY SẢN</font></strong></span></label>
 </div>
 <div class="container-fluid pb-4 pt-4 paddding">
   <table>
@@ -313,62 +358,67 @@
     </tr>
   </table>
 </div>
-<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#update">Update Ngưỡng Cảnh Báo</button>
-<div  id="update" class="collapse">
-  <table style="width: 100%; align: center;" >
+<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#update"> Cập Nhật Ngưỡng Cảnh Báo</button>
+<div  id="update" class="collapse" >
+  <table style=" width: 70%; margin: 0 auto;text-align:center" >
     <tr style="align: center;">
       <th>
         <div class="form-group">
-          <div class="">
+          <div style="text-align: center">
             <label for=""> <strong>Nhiệt độ<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input type="text" class="form-control" id="usr">
+          <input id="maxTemp" type="number" step="0.1" class="form-control" size="30" min="20" max="100">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input type="password" class="form-control" id="pwd">
+          <input id="minTemp" type="number" step="0.1" class="form-control" size="30" min="15" max="50">
         </div>
       </th>
       <th>
         <div class="form-group">
-          <div class="">
+          <div style="text-align: center">
             <label for=""> <strong>Độ mặn<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input type="text" class="form-control" id="usr">
+          <input id="maxCond" type="number" step="0.1" class="form-control" size="30" min="10" max="80">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input type="password" class="form-control" id="pwd">
+          <input id="minCond" type="number" step="0.1" class="form-control" size="30" min="1" max="80">
         </div>
       </th>
       <th>
         <div class="form-group">
-          <div class="">
+          <div style="text-align: center">
             <label for=""> <strong>Oxy<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input type="text" class="form-control" id="usr">
+        <input id="maxOxy" type="number" step="0.01" class="form-control" size="30" min="1" max="100">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input type="password" class="form-control" id="pwd">
+          <input id="minOxy" type="number" step="0.01" class="form-control" size="30" min="1" max="100">
         </div>
       </th>
       <th>
         <div class="form-group">
-          <div class="">
+          <div style="text-align: center">
               <label for=""> <strong>pH<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input type="text" class="form-control" id="usr">
+          <input id="maxPH" type="number" step="0.1" class="form-control" size="30" min="1" max="14">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input type="password" class="form-control" id="pwd">
+          <input id="minPH" type="number" step="0.1" class="form-control" size="30" min="1" max="14">
         </div>
       </th>
+      <th style="align: center;">
+        <div style="text-align: center">
+          <button type="button" name="button"  class="btn btn-info btn-lg" onclick = "update()">Gửi đi</button>
+        </th>
+        </div>
     </tr>
   </table>
 </div>
