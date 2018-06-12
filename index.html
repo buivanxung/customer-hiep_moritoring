@@ -24,6 +24,10 @@
         $('#oxy1').html("0 (mg/L)");
         $('#ph1').html("0");
         $('#status').html("Đang kết nối");
+        $('#T').html("0 - 0");
+        $('#C').html("0 - 0");
+        $('#P').html("0 - 0");
+        $('#O').html("0 - 0");
         socket = io.connect('http://localhost:5000',{
           reconnection: true,
           reconnectionDelay: 1000,
@@ -75,6 +79,21 @@
             $("input[name='manual']").removeAttr("disabled");
           }
           console.log(data);
+        });
+        socket.on('control_update', function(data) {
+          var res = data.split("/");
+          var xT = res[0].split(":");
+          var nT = res[1].split(":");
+          var xC = res[2].split(":");
+          var nC = res[3].split(":");
+          var xO = res[4].split(":");
+          var nO = res[5].split(":");
+          var xP = res[6].split(":");
+          var nP = res[7].split(":");
+          $('#T').html(nT[1]+ "-" + xT[1]);
+          $('#C').html(nC[1]+ "-" + xC[1]);
+          $('#O').html(nO[1]+ "-" + xO[1]);
+          $('#P').html(nT[1]+ "-" + xT[1]);
         });
         setInterval(function () {
           if (r_status == true) {
@@ -170,7 +189,7 @@
     <tr>
       <table style="width: 100%; align: center;" >
         <tr>
-          <th> <center> <font size = "10" color="#b30059">  Nhiệt độ </font></center></th>
+          <th> <center> <font size = "10" color="#b30059">  Nhiệt độ  </font></center></th>
           <th> <center> <font size = "10" color="#b30059"> Độ mặn  </font></center></th>
           <th> <center> <font size = "10" color="#b30059"> Oxy </font><center></th>
           <th> <center> <font size = "10" color="#b30059"> pH</font></center></th>
@@ -204,7 +223,47 @@
 <div class="container-fluid fh5co_footer_right_reserved">
     <div class="container">
         <div class="row  ">
-            <div class="col-12 col-md-6 py-4 Reserved"> IOT Smart Water - <strong>PHA </strong> - <strong>Distribution Company </strong> </div>
+            <div class="col-12 col-md-6 py-4 Reserved"><font size = "5"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font> </div>
+            <div class="col-12 col-md-6 spdp_right py-4">
+        </div>
+    </div>
+</div>
+<div class="container-fluid pb-4 pt-4 paddding">
+  <table style="width: 100%; align: center;" >
+    <tr>
+      <th> <center> <font size = "4" color="#47476b">  Nhiệt độ (oC) </font></center></th>
+      <th> <center> <font size = "4" color="#47476b"> Độ mặn (o/00) </font></center></th>
+      <th> <center> <font size = "4" color="#47476b"> Oxy (mg/L)</font><center></th>
+      <th> <center> <font size = "4" color="#47476b"> pH</font></center></th>
+    </tr>
+    <tr style="align: center;">
+      <td style="width: 25%; ">
+        <div align="center">
+        <label><center><strong><font size = "6"><span id="T"></span></font></strong></center></label>
+        </div>
+      </td>
+      <td style="width: 25%;">
+        <div align="center">
+            <label><center><strong><font size = "6"><span id="C"></span></font></strong></center></label>
+        </div>
+      </td>
+      <td style="width: 25%;">
+        <div align="center">
+        <label><center><strong><font size = "6"><span id="O"></span></font></strong></center></label>
+        </div>
+      </td>
+      <td style="width: 25%;">
+        <div align="center">
+        <label><center><strong><font size = "6"><span id="P"></span></font></strong></center></label>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="container-fluid fh5co_footer_right_reserved">
+    <div class="container">
+        <div class="row  ">
+            <div class="col-12 col-md-8 py-4 Reserved"> Một sản phẩm IoT của CÔNG TY CỔ PHẦN PHÂN PHỐI CÔNG NGHỆ <strong>PHA </strong> VIỆT NAM  </div>
             <div class="col-12 col-md-6 spdp_right py-4">
         </div>
     </div>

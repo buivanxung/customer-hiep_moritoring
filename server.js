@@ -123,51 +123,12 @@ io.on('connection', function (socket) {
       ph_v = ph[1];
       batery = raw[4].split("=");
       batery_v = batery[1];
-      // if (oxy_v < minOxy && ledStatus == true) {
-      //   portC.write ("C\n");
-      //   console.log("write ss B");
-      //   ledStatus = false;
-      // }else if (oxy_v > minOxy && ledStatus == false){
-      //   portC.write ("K\n");
-      //   console.log("write ss J");
-      //   ledStatus = true;
-      // }
-      // if (conductivity_v < minCond && ledStatus == true) {
-      //   portC.write ("C\n");
-      //   console.log("write ss C");
-      //   ledStatus = false;
-      // }else if (conductivity_v > minCond && ledStatus == false){
-      //   portC.write ("K\n");
-      //   console.log("write ss J");
-      //   ledStatus = true;
-      // }
-      // if (temperature_v < minTemp && ledStatus == true) {
-      //   portC.write ("C\n");
-      //   console.log("write ss D");
-      //   ledStatus = false;
-      // }else if (temperature_v > minTemp && ledStatus == false){
-      //   portC.write ("K\n");
-      //   console.log("write ss L");
-      //   ledStatus = true;
-      // }
-      // if (ph_v < minPh && ledStatus == true) {
-      //   portC.write ("C\n");
-      //   console.log("write ss E");
-      //   ledStatus = false;
-      // }else if (ph_v > minPh && ledStatus == false){
-      //   portC.write ("K\n");
-      //   console.log("write ss M");
-      //   ledStatus = true;
-      // }
-      // ||ph_v > minPh || temperature_v > minTemp ||oxy_v > minOxy || conductivity_v > minCond
       if (ph_v < minPh || temperature_v < minTemp || oxy_v < minOxy || conductivity_v < minCond || ph_v > maxPh || temperature_v > maxTemp ||oxy_v > maxOxy || conductivity_v > maxCond) {
-        console.log("Check OK");
         if (ledStatus == true) {
           portC.write ("C\n");
           ledStatus = false;
         }
       } else {
-        console.log("Check not ok");
         if (ledStatus == false) {
           portC.write ("K\n");
           ledStatus = true;
@@ -193,6 +154,9 @@ io.on('connection', function (socket) {
       console.log('Data:', port.read());
   });
   setInterval(function () {
+    var data = "xT:" + maxTemp + "/" + "nT:" + minTemp + "/" + "xC:" + maxCond + "/" + "nC:" + minCond  + "/" + "xO:" + maxOxy + "/" + "nO:" + minOxy + "/" +  "xP:" + maxPh + "/" + "nP:" + minPh + "/";
+    socket.emit('control_update', data);
+    arm.emit('server_update', data);
     if (status_control == false) {
       socket.emit('control_status', "F");
       arm.emit('server_control_status', "F");
@@ -234,14 +198,34 @@ arm.on('webtoserver_control', function(data) {
     }
     console.log(data);
   });
-  arm.on('servertoweb_status', function(data) {
-      if (data == "A") {
-        status_control = true;
-      } else if (data == "M"){
-        status_control = false;
-      }
-     console.log(" "+ data);
-    });
+arm.on('servertoweb_status', function(data) {
+    if (data == "A") {
+      status_control = true;
+    } else if (data == "M"){
+      status_control = false;
+    }
+   console.log(" "+ data);
+  });
+arm.on('update', function(data) {
+  var res = data.split("/");
+  var xT = res[0].split(":");
+  var nT = res[1].split(":");
+  var xC = res[2].split(":");
+  var nC = res[3].split(":");
+  var xO = res[4].split(":");
+  var nO = res[5].split(":");
+  var xP = res[6].split(":");
+  var nP = res[7].split(":");
+  minTemp = nT[1];
+  maxTemp = xT[1];
+  minCond = nC[1];
+  maxCond = xC[1];
+  minOxy = nO[1];
+  maxOxy = xO[1];
+  minPh = nP[1];
+  maxPh = xP[1];
+   console.log(" "+ data);
+  });
 arm.on('disconnect', function(){});
 
 function f_postData() {
