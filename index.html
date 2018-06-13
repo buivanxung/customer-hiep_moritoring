@@ -111,7 +111,11 @@
         }, 120000);
         setInterval(function () {
           var raw_time = new Date();
-          $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
+          if (raw_time.getMinutes() < 10) {
+            $('#time').html(raw_time.getHours()+":0"+(raw_time.getMinutes()));
+          } else {
+            $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
+          }
         }, 100);
       });
 
