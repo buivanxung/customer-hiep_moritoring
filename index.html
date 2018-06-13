@@ -22,16 +22,16 @@
       var imaxTemp='',iminTemp='',imaxCond='',iminCond='',imaxOxy='',iminOxy='',imaxPH='',iminPH='';
       $(document).ready(function()
         {
-          $('#temp1').html("0 oC");
-          $('#conduc1').html("0 (o/00)");
-          $('#oxy1').html("0 (mg/L)");
+          $('#temp1').html("0");
+          $('#conduc1').html("0");
+          $('#oxy1').html("0");
           $('#ph1').html("0");
           $('#status').html("Đang kết nối");
           $('#T').html("0 - 0");
            $('#C').html("0 - 0");
            $('#P').html("0 - 0");
            $('#O').html("0 - 0");
-          socket = io.connect('http://103.15.51.143:5000',{
+          socket = io.connect('http://192.168.1.2:5000',{
             reconnection: true,
             reconnectionDelay: 1000,
             reconnectionDelayMax : 5000,
@@ -49,9 +49,9 @@
             var ph_v = ph[1];
             var bat = res[4].split("=");
             var bat_v = bat[1];
-            $('#temp1').html(tempt_v + "oC");
-            $('#conduc1').html(cond_v + "(o/00)");
-            $('#oxy1').html(oxy_v +"(mg/L)");
+            $('#temp1').html(tempt_v);
+            $('#conduc1').html(cond_v);
+            $('#oxy1').html(oxy_v);
             $('#ph1').html(ph_v);
             console.log(res);
   				});
@@ -242,10 +242,10 @@
     <tr>
       <table style="width: 100%; margin: 0 auto;text-align:center" >
         <tr>
-          <th> <center> <font size = "8" color="#b30059">  Nhiệt độ </font></center></th>
-          <th> <center> <font size = "8" color="#b30059"> Độ mặn  </font></center></th>
-          <th> <center> <font size = "8" color="#b30059"> Oxy </font><center></th>
-          <th> <center> <font size = "8" color="#b30059"> PH</font></center></th>
+          <th> <center> <font size = "7" color="#b30059">  Nhiệt độ </font>  <font size = "5" color="#b30059">(oC)</font></center></th>
+          <th> <center> <font size = "7" color="#b30059"> Độ mặn  </font>  <font size = "5" color="#b30059">(o/00)</font></center></th>
+          <th> <center> <font size = "7" color="#b30059"> Oxy </font>  <font size = "5" color="#b30059">(mg/L)</font><center></th>
+          <th> <center> <font size = "7" color="#b30059"> PH</font></center></th>
         </tr>
         <tr style="align: center;">
           <td style="width: 25%; ">
