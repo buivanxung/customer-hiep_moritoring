@@ -109,9 +109,9 @@
            imaxPH = $('#maxPH').val();
            iminPH = $('#minPH').val();
            if (imaxTemp =='' || iminTemp =='' || imaxCond =='' || iminCond =='' || imaxOxy =='' || iminOxy == '' || imaxPH == '' || iminPH =='') {
-             $('#check').html("Not value");
+             $("#mode_update").prop("disabled", true);
            }else {
-             $('#check').html("Check OK");
+             $("#mode_update").removeAttr('disabled');
            }
          });
           setInterval(function () {
@@ -391,7 +391,7 @@
       </th>
       <th style="align: center;">
         <div style="text-align: center">
-          <button type="button" name="button"  class="btn btn-info btn-lg" onclick = "update_mix()">Gửi đi</button>
+          <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()">Gửi đi</button>
         </th>
         </div>
     </tr>
