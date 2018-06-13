@@ -180,7 +180,7 @@
         function update_mix() {
           var data = "xT:" + imaxTemp + "/" + "nT:" + iminTemp + "/" + "xC:" + imaxCond + "/" + "nC:" + iminCond  + "/" + "xO:" + imaxOxy + "/" + "nO:" + iminOxy + "/" +  "xP:" + imaxPH + "/" + "nP:" + iminPH + "/";
           console.log(data);
-          if (socket) {
+          if (socket && imaxPH != 0) {
   					socket.emit('web_update', data);
              $('#maxTemp').val()='';
              $('#minTemp').val()='';
