@@ -46,7 +46,6 @@ io.on('connection', function (socket) {
         } else if (data == "F"){
           status_control = false;
         }
-         console.log(" "+ data);
       });
   socket.on('server_update', function(data) {
         socket.broadcast.emit('server_update_web', data);
@@ -60,11 +59,10 @@ io.on('connection', function (socket) {
         } else if (data == "S"){
           status_cerrent = false;
         }
-         console.log(" "+ data);
+
       });
   socket.on('feedback', function(data) {
       socket.broadcast.emit('server_feedback', data);
-      console.log("R"+ data);
       });
   setInterval(function () {
     if (status_control == false) {
@@ -77,7 +75,6 @@ io.on('connection', function (socket) {
     } else {
       socket.broadcast.emit('server_status', "R");
     }
-	console.log("request " +status_control);
   }, 5000);
 });
 http.listen(5000, function () {
