@@ -99,7 +99,7 @@
             $('#P').html(nP[1]+ "-" + xP[1]);
           });
 
-          $('input').on('click', function() {
+          $('input').on('input', function() {
            imaxTemp = $('#maxTemp').val();
            iminTemp = $('#minTemp').val();
            imaxCond = $('#maxCond').val();
@@ -178,11 +178,20 @@
          return true;
         }
         function update_mix() {
+          imaxTemp = $('#maxTemp').val();
+          iminTemp = $('#minTemp').val();
+          imaxCond = $('#maxCond').val();
+          iminCond = $('#minCond').val();
+          imaxOxy = $('#maxOxy').val();
+          iminOxy = $('#minOxy').val();
+          imaxPH = $('#maxPH').val();
+          iminPH = $('#minPH').val();
           var data = "xT:" + imaxTemp + "/" + "nT:" + iminTemp + "/" + "xC:" + imaxCond + "/" + "nC:" + iminCond  + "/" + "xO:" + imaxOxy + "/" + "nO:" + iminOxy + "/" +  "xP:" + imaxPH + "/" + "nP:" + iminPH + "/";
           console.log(data);
           if (socket && imaxPH != 0) {
   					socket.emit('web_update', data);
              $("#mode_update").prop("disabled", true);
+
   				}
           return true;
         }
@@ -275,10 +284,12 @@
     </tr>
   </table>
 </div>
-<div class="container-fluid pb-4 pt-4 paddding">
-    <div><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font>
+<div class="container-fluid fh5co_footer_right_reserved text-center">
+    <div><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font></div>
+      <div >
         <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#update"> Cập Nhật </button>
-     </div>
+      </div>
+
 
 </div>
 <div class="container-fluid pb-4 pt-4 paddding">
@@ -371,12 +382,31 @@
       </th>
       <th class="text-center" style="align: center; width: 30%">
         <div class="text-center">
-          <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()">Xác Nhận</button>
+          <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()" data-toggle="modal" data-target="#myModal">Xác Nhận</button>
         </th>
         </div>
     </tr>
   </table>
 </div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Trình Trạng</h4>
+        </div>
+        <div class="modal-body">
+          <p>Đã gửi yêu cầu đi thành công!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 <div class="container-fluid fh5co_footer_right_reserved text-center">
   <div> Một sản phẩm IoT của CÔNG TY CỔ PHẦN PHÂN PHỐI CÔNG NGHỆ <strong>PHA </strong> VIỆT NAM  </div>
   <p> <a href="https://www.phadistribution.com">www.phadistribution.com</a></p>
