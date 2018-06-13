@@ -182,14 +182,14 @@
           console.log(data);
           if (socket && imaxPH != 0) {
   					socket.emit('web_update', data);
-             $('#maxTemp').val()='';
-             $('#minTemp').val()='';
-             $('#maxCond').val()='';
-             $('#minCond').val()='';
-             $('#maxOxy').val()='';
-             $('#minOxy').val()='';
-             $('#maxPH').val()='';
-             $('#minPH').val()='';
+             $('#maxTemp').val()=0;
+             $('#minTemp').val()=0;
+             $('#maxCond').val()=0;
+             $('#minCond').val()=0;
+             $('#maxOxy').val()=0;
+             $('#minOxy').val()=0;
+             $('#maxPH').val()=0;
+             $('#minPH').val()=0;
              $("#mode_update").prop("disabled", true);
   				}
           return true;
