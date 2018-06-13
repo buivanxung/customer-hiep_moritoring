@@ -182,6 +182,15 @@
           console.log(data);
           if (socket) {
   					socket.emit('web_update', data);
+             $('#maxTemp').html('');
+             $('#minTemp').html('');
+             $('#maxCond').html('');
+             $('#minCond').html('');
+             $('#maxOxy').html('');
+             $('#minOxy').html('');
+             $('#maxPH').html('');
+             $('#minPH').html('');
+             $("#mode_update").prop("disabled", true);
   				}
           return true;
         }
