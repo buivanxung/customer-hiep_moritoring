@@ -15,201 +15,176 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
-    var socket;
-    var c_connect = true;
-	  var r_status = true;
-    var maxTemp=0,minTemp=0,maxCond=0,minCond=0,maxOxy=0,minOxy=0,maxPH=0,minPH=0;
-    var imaxTemp='',iminTemp='',imaxCond='',iminCond='',imaxOxy='',iminOxy='',imaxPH='',iminPH='';
-    $(document).ready(function()
-      {
-        $('#temp1').html("0 oC");
-        $('#conduc1').html("0 (o/00)");
-        $('#oxy1').html("0 (mg/L)");
-        $('#ph1').html("0");
-        $('#status').html("Đang kết nối");
-        $('#T').html("0 - 0");
-         $('#C').html("0 - 0");
-         $('#P').html("0 - 0");
-         $('#O').html("0 - 0");
-        socket = io.connect('http://103.15.51.143:5000',{
-          reconnection: true,
-          reconnectionDelay: 1000,
-          reconnectionDelayMax : 5000,
-          reconnectionAttempts: 99999
-        });
-				socket.on('server_feedback', function (data) {
-          var res = data.split(",");
-          var tempt = res[0].split("=");
-          var tempt_v = tempt[1];
-          var cond = res[1].split("=");
-          var cond_v = cond[1];
-          var oxy = res[2].split("=");
-          var oxy_v = oxy[1];
-          var ph = res[3].split("=");
-          var ph_v = ph[1];
-          var bat = res[4].split("=");
-          var bat_v = bat[1];
-          $('#temp1').html(tempt_v + "oC");
-          $('#conduc1').html(cond_v + "(o/00)");
-          $('#oxy1').html(oxy_v +"(mg/L)");
-          $('#ph1').html(ph_v);
-          console.log(res);
-				});
-        socket.on('server_status', function(data) {
-          if (data == "R" ) {
-            $('#status').html("Trạng thái bơm: Đang chạy");
-          } else if (data == "S" ) {
-            $('#status').html("Trạng thái bơm: Đang Tắt");
-          }
-          if (data == "R" && r_status == false) {
-            $("input[name='run']").attr("disabled", "disabled");
-            $("input[name='stop']").removeAttr("disabled");
-          } else if (data == "S" && r_status == false) {
-            $("input[name='stop']").attr("disabled", "disabled");
-            $("input[name='run']").removeAttr("disabled");
-          }
-          console.log(data);
-        });
-        socket.on('server_control_status', function(data) {
-          c_connect = false;
-          if (data == "F") {
-            r_status = false;
-            $("input[name='manual']").removeAttr("disabled");
-          } else if (data == "T") {
-            r_status = true;
-            $("input[name='run']").attr("disabled", "disabled");
-            $("input[name='stop']").attr("disabled", "disabled");
-            $("input[name='manual']").removeAttr("disabled");
-          }
-          console.log(data);
-        });
-        socket.on('server_update_web', function(data) {
-          var res = data.split("/");
-          var xT = res[0].split(":");
-          var nT = res[1].split(":");
-          var xC = res[2].split(":");
-          var nC = res[3].split(":");
-          var xO = res[4].split(":");
-          var nO = res[5].split(":");
-          var xP = res[6].split(":");
-          var nP = res[7].split(":");
-          $('#T').html(nT[1]+ "-" + xT[1]);
-          $('#C').html(nC[1]+ "-" + xC[1]);
-          $('#O').html(nO[1]+ "-" + xO[1]);
-          $('#P').html(nP[1]+ "-" + xP[1]);
-        });
-
-        $('input').on('click', function() {
-         imaxTemp = $('#maxTemp').val();
-         if (imaxTemp < 1 || imaxTemp > 100 || numberSample == '') {
-           $('#status_sample').html("Sample Number Over Range Scope!");
-           $('#numberSample').val() = 4;
-         }else {
-           $('#status_sample').html('');
-         }
-         numberTime = $('#numberTime').val();
-         if (numberTime < 0 || numberTime > 500 || numberTime == '') {
-           $('#status_time').html("Time Measuring Over Range Scope!");
-           $('#numberTime').val() = 60;
-         }else {
-           $('#status_time').html('');
-         }
-         if (numberSample == 1) {
-           $("input[name='sample_1']").prop("disabled", false);
-           $("input[name='sample_2']").prop("disabled", true);
-           $("input[name='sample_3']").prop("disabled", true);
-           $("input[name='sample_4']").prop("disabled", true);
-         } else if (numberSample == 2) {
-           $("input[name='sample_1']").prop("disabled", false);
-           $("input[name='sample_2']").prop("disabled", false);
-           $("input[name='sample_3']").prop("disabled", true);
-           $("input[name='sample_4']").prop("disabled", true);
-         }else if (numberSample == 3) {
-           $("input[name='sample_1']").prop("disabled", false);
-           $("input[name='sample_2']").prop("disabled", false);
-           $("input[name='sample_3']").prop("disabled", false);
-           $("input[name='sample_4']").prop("disabled", true);
-         }else if (numberSample == 4 ) {
-           $("input[name='sample_1']").prop("disabled", false);
-           $("input[name='sample_2']").prop("disabled", false);
-           $("input[name='sample_3']").prop("disabled", false);
-           $("input[name='sample_4']").prop("disabled", false);
-         }else {
-           $("input[name='sample_1']").prop("disabled", true);
-           $("input[name='sample_2']").prop("disabled", true);
-           $("input[name='sample_3']").prop("disabled", true);
-           $("input[name='sample_4']").prop("disabled", true);
-         }
-        setInterval(function () {
-          if (r_status == true) {
-            $('#mode').html("Mode: Tự động");
-            $("input[name='manual']").val('Bằng Tay');
-          } else {
-            $('#mode').html("Mode: Điều khiển bằng tay");
-              $("input[name='manual']").val('Tự động');
-          }
-        }, 1000);
-        setInterval(function () {
-          if (c_connect == true) {
-            location.reload(true);
-          }
-        }, 120000);
-        setInterval(function () {
-          var raw_time = new Date();
-          if (raw_time.getMinutes() < 10) {
-            $('#time').html(raw_time.getHours()+":0"+(raw_time.getMinutes()));
-          } else {
-            $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
-          }
-        }, 100);
-      });
-
-      function run() {
-        if (socket) {
-					socket.emit('server_web_control', "R");
-				}
-        if (r_status == false) {
-           $("input[name='run']").attr("disabled", "disabled");
-           $("input[name='stop']").removeAttr("disabled");
-           $('#status').html("Máy Đang Bơm");
-        }
-        return true;
-      }
-      function stop() {
-          if (socket) {
-					socket.emit('server_web_control', "S");
-				 }
-         if (r_status == false) {
-           $("input[name='run']").removeAttr("disabled");
-           $("input[name='stop']").attr("disabled", "disabled");
-           $('#status').html("Máy Đang Tắt");
-         }
-         return true;
-      }
-      function manual() {
-        if (r_status == true) {
-          status = false;
-          if (socket) {
-          socket.emit('server_web_status', "M");
-          }
-          $("input[name='manual']").attr("disabled", "disabled");
-        }else {
-          r_status = true;
-            if (socket) {
-              socket.emit('server_web_status', "A");
+      var socket;
+      var c_connect = true;
+  	  var r_status = true;
+      var maxTemp=0,minTemp=0,maxCond=0,minCond=0,maxOxy=0,minOxy=0,maxPH=0,minPH=0;
+      var imaxTemp='',iminTemp='',imaxCond='',iminCond='',imaxOxy='',iminOxy='',imaxPH='',iminPH='';
+      $(document).ready(function()
+        {
+          $('#temp1').html("0 oC");
+          $('#conduc1').html("0 (o/00)");
+          $('#oxy1').html("0 (mg/L)");
+          $('#ph1').html("0");
+          $('#status').html("Đang kết nối");
+          $('#T').html("0 - 0");
+           $('#C').html("0 - 0");
+           $('#P').html("0 - 0");
+           $('#O').html("0 - 0");
+          socket = io.connect('http://103.15.51.143:5000',{
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax : 5000,
+            reconnectionAttempts: 99999
+          });
+  				socket.on('server_feedback', function (data) {
+            var res = data.split(",");
+            var tempt = res[0].split("=");
+            var tempt_v = tempt[1];
+            var cond = res[1].split("=");
+            var cond_v = cond[1];
+            var oxy = res[2].split("=");
+            var oxy_v = oxy[1];
+            var ph = res[3].split("=");
+            var ph_v = ph[1];
+            var bat = res[4].split("=");
+            var bat_v = bat[1];
+            $('#temp1').html(tempt_v + "oC");
+            $('#conduc1').html(cond_v + "(o/00)");
+            $('#oxy1').html(oxy_v +"(mg/L)");
+            $('#ph1').html(ph_v);
+            console.log(res);
+  				});
+          socket.on('server_status', function(data) {
+            if (data == "R" ) {
+              $('#status').html("Trạng thái bơm: Đang chạy");
+            } else if (data == "S" ) {
+              $('#status').html("Trạng thái bơm: Đang Tắt");
             }
-          $("input[name='manual']").attr("disabled", "disabled");
+            if (data == "R" && r_status == false) {
+              $("input[name='run']").attr("disabled", "disabled");
+              $("input[name='stop']").removeAttr("disabled");
+            } else if (data == "S" && r_status == false) {
+              $("input[name='stop']").attr("disabled", "disabled");
+              $("input[name='run']").removeAttr("disabled");
+            }
+            console.log(data);
+          });
+          socket.on('server_control_status', function(data) {
+            c_connect = false;
+            if (data == "F") {
+              r_status = false;
+              $("input[name='manual']").removeAttr("disabled");
+            } else if (data == "T") {
+              r_status = true;
+              $("input[name='run']").attr("disabled", "disabled");
+              $("input[name='stop']").attr("disabled", "disabled");
+              $("input[name='manual']").removeAttr("disabled");
+            }
+            console.log(data);
+          });
+          socket.on('server_update_web', function(data) {
+            var res = data.split("/");
+            var xT = res[0].split(":");
+            var nT = res[1].split(":");
+            var xC = res[2].split(":");
+            var nC = res[3].split(":");
+            var xO = res[4].split(":");
+            var nO = res[5].split(":");
+            var xP = res[6].split(":");
+            var nP = res[7].split(":");
+            $('#T').html(nT[1]+ "-" + xT[1]);
+            $('#C').html(nC[1]+ "-" + xC[1]);
+            $('#O').html(nO[1]+ "-" + xO[1]);
+            $('#P').html(nP[1]+ "-" + xP[1]);
+          });
+
+          $('input').on('click', function() {
+           imaxTemp = $('#maxTemp').val();
+           iminTemp = $('#minTemp').val();
+           imaxCond = $('#maxCond').val();
+           iminCond = $('#minCond').val();
+           imaxOxy = $('#maxOxy').val();
+           iminOxy = $('#minOxy').val();
+           imaxPH = $('#maxPH').val();
+           iminPH = $('#minPH').val();
+           if (imaxTemp =='' || iminTemp =='' || imaxCond =='' || iminCond =='' || imaxOxy =='' || iminOxy == '' || imaxPH == '' || iminPH =='') {
+             $('#check').html("Not value");
+           }else {
+             $('#check').html("Check OK");
+           }
+         });
+          setInterval(function () {
+            if (r_status == true) {
+              $('#mode').html("Mode: Tự động");
+              $("input[name='manual']").val('Bằng Tay');
+            } else {
+              $('#mode').html("Mode: Điều khiển bằng tay");
+                $("input[name='manual']").val('Tự động');
+            }
+          }, 1000);
+          setInterval(function () {
+            if (c_connect == true) {
+              location.reload(true);
+            }
+          }, 120000);
+          setInterval(function () {
+            var raw_time = new Date();
+            if (raw_time.getMinutes() < 10) {
+              $('#time').html(raw_time.getHours()+":0"+(raw_time.getMinutes()));
+            } else {
+              $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
+            }
+          }, 100);
+        });
+
+        function run() {
+          if (socket) {
+  					socket.emit('server_web_control', "R");
+  				}
+          if (r_status == false) {
+             $("input[name='run']").attr("disabled", "disabled");
+             $("input[name='stop']").removeAttr("disabled");
+             $('#status').html("Máy Đang Bơm");
+          }
+          return true;
         }
-	       console.log(r_status);
-       return true;
-      }
-      function update() {
-        var data = "";
-        if (socket) {
-					socket.emit('web_update', data);
-				}
-        return true;
-      }
+        function stop() {
+            if (socket) {
+  					socket.emit('server_web_control', "S");
+  				 }
+           if (r_status == false) {
+             $("input[name='run']").removeAttr("disabled");
+             $("input[name='stop']").attr("disabled", "disabled");
+             $('#status').html("Máy Đang Tắt");
+           }
+           return true;
+        }
+        function manual() {
+          if (r_status == true) {
+            status = false;
+            if (socket) {
+            socket.emit('server_web_status', "M");
+            }
+            $("input[name='manual']").attr("disabled", "disabled");
+          }else {
+            r_status = true;
+              if (socket) {
+                socket.emit('server_web_status', "A");
+              }
+            $("input[name='manual']").attr("disabled", "disabled");
+          }
+  	       console.log(r_status);
+         return true;
+        }
+        function update_mix() {
+          var data = "xT:" + imaxTemp + "/" + "nT:" + iminTemp + "/" + "xC:" + imaxCond + "/" + "nC:" + iminCond  + "/" + "xO:" + imaxOxy + "/" + "nO:" + iminOxy + "/" +  "xP:" + imaxPH + "/" + "nP:" + iminPH + "/";
+          console.log(data);
+          if (socket) {
+  					socket.emit('web_update', data);
+  				}
+          return true;
+        }
     </script>
     <style>
 * {
@@ -416,7 +391,7 @@
       </th>
       <th style="align: center;">
         <div style="text-align: center">
-          <button type="button" name="button"  class="btn btn-info btn-lg" onclick = "update()">Gửi đi</button>
+          <button type="button" name="button"  class="btn btn-info btn-lg" onclick = "update_mix()">Gửi đi</button>
         </th>
         </div>
     </tr>
