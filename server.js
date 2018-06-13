@@ -123,14 +123,14 @@ io.on('connection', function (socket) {
       ph_v = ph[1];
       batery = raw[4].split("=");
       batery_v = batery[1];
-      var data = "xT:" + maxTemp + "/" + "nT:" + minTemp + "/" + "xC:" + maxCond + "/" + "nC:" + minCond  + "/" + "xO:" + maxOxy + "/" + "nO:" + minOxy + "/" +  "xP:" + maxPh + "/" + "nP:" + minPh + "/";
-      console.log(data);
       if (ph_v < minPh || temperature_v < minTemp || oxy_v < minOxy || conductivity_v < minCond || ph_v > maxPh || temperature_v > maxTemp ||oxy_v > maxOxy || conductivity_v > maxCond) {
+        console.log("OK1");
         if (ledStatus == true) {
           portC.write ("C\n");
           ledStatus = false;
         }
       } else {
+        console.log("OK2");
         if (ledStatus == false) {
           portC.write ("K\n");
           ledStatus = true;
