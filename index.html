@@ -187,10 +187,31 @@
           return true;
         }
     </script>
+    <style >
+      #body {
+      width: 100%;
+      height: 100%;
+      }
+    </style>
 </head>
-<body style="align:center; width:100%;">
-  <div  class="jumbotron text-center" style="background-color:#f1f1f1;padding:15px; margin: 0 auto;text-align:center; width:100%;">
-    <label ><span><strong><font size = "7">HỆ THỐNG ĐIỀU KHIỂN VÀ GIÁM SÁT CHẤT LƯỢNG NƯỚC THỦY SẢN</font></strong></span></label>
+<body id="body" style="align:center; width:100%;">
+  <div  style="text-align:center; width:100%;">
+    <table>
+      <tr>
+        <th>
+          <div>
+            <img src="images/humid.png"  height="140" width="170">
+          </div>
+        </th>
+        <th>
+          <div class=" text-center" style=" margin: 0 auto;text-align:center">
+              <label style="color:#002b80;"><span><strong><font size = "6">HỆ THỐNG ĐIỀU KHIỂN VÀ GIÁM SÁT CHẤT LƯỢNG NƯỚC THỦY SẢN</font></strong></span></label>
+              <label class="font-italic"><span><font size = "5">Smart Water Monitoring and Control System for Aquaculture</font></span></label>
+          </div>
+        </th>
+      </tr>
+    </table>
+
 </div>
 <div >
   <table>
@@ -252,11 +273,8 @@
     </tr>
   </table>
 </div>
-<div class="container-fluid fh5co_footer_right_reserved">
-    <div class="container">
-        <div class="row  ">
-            <div class="col-12 col-md-6 py-4 Reserved"><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font> </div>
-    </div>
+<div >
+    <div><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font> </div>
 </div>
 <div class="container-fluid pb-4 pt-4 paddding">
   <table style="width: 100%; align: center;" >
@@ -290,8 +308,8 @@
     </tr>
   </table>
 </div>
-<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#update"> Cập Nhật Ngưỡng Cảnh Báo</button>
-<div  id="update" class="collapse" >
+<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#update"> Cập Nhật </button>
+<div  id="update" class="collapse" style="background: #e6f3ff" >
   <table style=" width: 70%; margin: 0 auto;text-align:center" >
     <tr style="align: center;">
       <th>
@@ -358,6 +376,10 @@
     <div class="container">
         <div class="row  ">
             <div class="col-12 col-md-8 py-4 Reserved"> Một sản phẩm IoT của CÔNG TY CỔ PHẦN PHÂN PHỐI CÔNG NGHỆ <strong>PHA </strong> VIỆT NAM  </div>
+            <div class="col-12 col-md-8 ">
+              <p>Website: <a href="https://www.phadistribution.com">www.phadistribution.com</a></p>
+
+            </div>
         </div>
     </div>
 </div>
