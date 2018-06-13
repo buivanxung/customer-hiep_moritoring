@@ -187,31 +187,33 @@
           return true;
         }
     </script>
-    <style >
-      #body {
-      width: 100%;
-      height: 100%;
-      }
-    </style>
 </head>
-<body id="body" style="align:center; width:100%;">
+<body style="align:center; width:100%; height: 100%; ">
+  <div >
+    <table>
+      <th>
+        <div >
+          <p>      </p>
+        </div>
+      </th>
+    </table>
+  </div>
   <div  style="text-align:center; width:100%;">
     <table>
       <tr>
-        <th>
-          <div>
-            <img src="images/humid.png"  height="140" width="170">
+        <th style="top: 0;  left: 0;  right: 0;  bottom: 0;">
+          <div class=" text-center" style=" padding: 4;  margin: 4;  vertical-align:middle; ">
+            <img src="images/PHA_Logo_Iot.png" height="120" width="150">
           </div>
         </th>
         <th>
-          <div class=" text-center" style=" margin: 0 auto;text-align:center">
+          <div class=" text-center" style=" margin: 0 auto;text-align:center; ">
               <label style="color:#002b80;"><span><strong><font size = "6">HỆ THỐNG ĐIỀU KHIỂN VÀ GIÁM SÁT CHẤT LƯỢNG NƯỚC THỦY SẢN</font></strong></span></label>
               <label class="font-italic"><span><font size = "5">Smart Water Monitoring and Control System for Aquaculture</font></span></label>
           </div>
         </th>
       </tr>
     </table>
-
 </div>
 <div >
   <table>
@@ -245,7 +247,7 @@
           <th> <center> <font size = "7" color="#b30059">  Nhiệt độ </font>  <font size = "5" color="#b30059">(oC)</font></center></th>
           <th> <center> <font size = "7" color="#b30059"> Độ mặn  </font>  <font size = "5" color="#b30059">(o/00)</font></center></th>
           <th> <center> <font size = "7" color="#b30059"> Oxy </font>  <font size = "5" color="#b30059">(mg/L)</font><center></th>
-          <th> <center> <font size = "7" color="#b30059"> PH</font></center></th>
+          <th> <center> <font size = "7" color="#b30059"> pH</font></center></th>
         </tr>
         <tr style="align: center;">
           <td style="width: 25%; ">
@@ -273,8 +275,11 @@
     </tr>
   </table>
 </div>
-<div >
-    <div><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font> </div>
+<div class="container-fluid pb-4 pt-4 paddding">
+    <div><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font>
+        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#update"> Cập Nhật </button>
+     </div>
+
 </div>
 <div class="container-fluid pb-4 pt-4 paddding">
   <table style="width: 100%; align: center;" >
@@ -308,9 +313,9 @@
     </tr>
   </table>
 </div>
-<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#update"> Cập Nhật </button>
+
 <div  id="update" class="collapse" style="background: #e6f3ff" >
-  <table style=" width: 70%; margin: 0 auto;text-align:center" >
+  <table style=" width: 80%; margin: 0 auto;text-align:center" >
     <tr style="align: center;">
       <th>
         <div class="form-group">
@@ -318,11 +323,11 @@
             <label for=""> <strong>Nhiệt độ<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input id="maxTemp" type="number" step="0.1" class="form-control" size="30" min="20" max="100">
+          <input id="maxTemp" type="number" step="0.05" class="form-control" size="30" min="20" max="100">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input id="minTemp" type="number" step="0.1" class="form-control" size="30" min="15" max="50">
+          <input id="minTemp" type="number" step="0.05" class="form-control" size="30" min="15" max="50">
         </div>
       </th>
       <th>
@@ -331,11 +336,11 @@
             <label for=""> <strong>Độ mặn<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input id="maxCond" type="number" step="0.1" class="form-control" size="30" min="10" max="80">
+          <input id="maxCond" type="number" step="0.05" class="form-control" size="30" min="10" max="80">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input id="minCond" type="number" step="0.1" class="form-control" size="30" min="1" max="80">
+          <input id="minCond" type="number" step="0.05" class="form-control" size="30" min="1" max="80">
         </div>
       </th>
       <th>
@@ -344,11 +349,11 @@
             <label for=""> <strong>Oxy<strong></label>
           </div>
           <label for="usr">Max:</label>
-        <input id="maxOxy" type="number" step="0.01" class="form-control" size="30" min="1" max="100">
+        <input id="maxOxy" type="number" step="0.05" class="form-control" size="30" min="1" max="100">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input id="minOxy" type="number" step="0.01" class="form-control" size="30" min="1" max="100">
+          <input id="minOxy" type="number" step="0.05" class="form-control" size="30" min="1" max="100">
         </div>
       </th>
       <th>
@@ -357,34 +362,24 @@
               <label for=""> <strong>pH<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input id="maxPH" type="number" step="0.1" class="form-control" size="30" min="1" max="14">
+          <input id="maxPH" type="number" step="0.05" class="form-control" size="30" min="1" max="14">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input id="minPH" type="number" step="0.1" class="form-control" size="30" min="1" max="14">
+          <input id="minPH" type="number" step="0.05" class="form-control" size="30" min="1" max="14">
         </div>
       </th>
-      <th style="align: center;">
-        <div style="text-align: center">
-          <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()">Gửi đi</button>
+      <th class="text-center" style="align: center; width: 30%">
+        <div class="text-center">
+          <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()">Xác Nhận</button>
         </th>
         </div>
     </tr>
   </table>
 </div>
-<div class="container-fluid fh5co_footer_right_reserved">
-    <div class="container">
-        <div class="row  ">
-            <div class="col-12 col-md-8 py-4 Reserved"> Một sản phẩm IoT của CÔNG TY CỔ PHẦN PHÂN PHỐI CÔNG NGHỆ <strong>PHA </strong> VIỆT NAM  </div>
-            <div class="col-12 col-md-8 ">
-              <p>Website: <a href="https://www.phadistribution.com">www.phadistribution.com</a></p>
-
-            </div>
-        </div>
-    </div>
-</div>
-<div class="gototop js-top">
-    <a href="#" class="js-gotop"><i class="fa fa-arrow-up"></i></a>
+<div class="container-fluid fh5co_footer_right_reserved text-center">
+  <div> Một sản phẩm IoT của CÔNG TY CỔ PHẦN PHÂN PHỐI CÔNG NGHỆ <strong>PHA </strong> VIỆT NAM  </div>
+  <p> <a href="https://www.phadistribution.com">www.phadistribution.com</a></p>
 </div>
 </body>
 </html>
