@@ -182,14 +182,14 @@
           console.log(data);
           if (socket) {
   					socket.emit('web_update', data);
-             $('#maxTemp').html('');
-             $('#minTemp').html('');
-             $('#maxCond').html('');
-             $('#minCond').html('');
-             $('#maxOxy').html('');
-             $('#minOxy').html('');
-             $('#maxPH').html('');
-             $('#minPH').html('');
+             $('#maxTemp').val()=null;
+             $('#minTemp').val()=null;
+             $('#maxCond').val()=null;
+             $('#minCond').val()=null;
+             $('#maxOxy').val()=null;
+             $('#minOxy').val()=null;
+             $('#maxPH').val()=null;
+             $('#minPH').val()=null;
              $("#mode_update").prop("disabled", true);
   				}
           return true;
