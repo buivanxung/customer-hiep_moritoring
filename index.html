@@ -108,10 +108,12 @@
            iminOxy = $('#minOxy').val();
            imaxPH = $('#maxPH').val();
            iminPH = $('#minPH').val();
-           if (imaxTemp =='' || iminTemp =='' || imaxCond =='' || iminCond =='' || imaxOxy =='' || iminOxy == '' || imaxPH == '' || iminPH =='') {
-             $("#mode_update").prop("disabled", true);
-           }else {
-             $("#mode_update").removeAttr('disabled');
+           if (imaxTemp*1.00 <= iminTemp*1.00 || imaxCond*1.00 <= iminCond*1.00 || imaxPH*1.00 <= iminPH*1.00 || imaxOxy*1.00 <= iminOxy*1.00 || imaxTemp =='' || iminTemp =='' || imaxCond =='' || iminCond =='' || imaxOxy =='' || iminOxy == '' || imaxPH == '' || iminPH =='') {
+              $('#mode_update').prop("disabled", true);
+              $('#check2').html("Lỗi nhập giá trị");
+           } else {
+              $('#mode_update').removeAttr('disabled');
+              $('#check2').html(" ");
            }
          });
           setInterval(function () {
@@ -187,7 +189,6 @@
           imaxPH = $('#maxPH').val();
           iminPH = $('#minPH').val();
           var data = "xT:" + imaxTemp + "/" + "nT:" + iminTemp + "/" + "xC:" + imaxCond + "/" + "nC:" + iminCond  + "/" + "xO:" + imaxOxy + "/" + "nO:" + iminOxy + "/" +  "xP:" + imaxPH + "/" + "nP:" + iminPH + "/";
-          console.log(data);
           if (socket && imaxPH != 0) {
   					socket.emit('web_update', data);
              $("#mode_update").prop("disabled", true);
@@ -385,30 +386,14 @@
       <th class="text-center" style="align: center; width: 30%">
         <div class="text-center">
           <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()" >Xác Nhận</button>
-        </th>
         </div>
+        <div class="text-center">
+          <label for=""><span id="check2"> </span></label>
+        </div>
+        </th>
     </tr>
   </table>
 </div>
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Trình Trạng</h4>
-        </div>
-        <div class="modal-body">
-          <p>Đã gửi yêu cầu đi thành công!</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
 <div class="container-fluid fh5co_footer_right_reserved text-center">
   <div> Một sản phẩm IoT của CÔNG TY CỔ PHẦN PHÂN PHỐI CÔNG NGHỆ <strong>PHA </strong> VIỆT NAM  </div>
   <p> <a href="https://www.phadistribution.com">www.phadistribution.com</a></p>
