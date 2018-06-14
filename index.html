@@ -180,6 +180,7 @@
          return true;
         }
         function update_mix() {
+          $("button[name='change']").val('Đóng');
           imaxTemp = $('#maxTemp').val();
           iminTemp = $('#minTemp').val();
           imaxCond = $('#maxCond').val();
@@ -195,6 +196,14 @@
              alert("Đã gửi yêu cầu thành công!");
   				}else {
             alert("Lỗi kết nối!");
+          }
+          return true;
+        }
+        function change_button() {
+          if ($("button[name='change']").val() == "Đóng") {
+            $("button[name='change']").val("Cập Nhật");
+          }else {
+            $("button[name='change']").val("Đóng");
           }
           return true;
         }
@@ -290,10 +299,8 @@
 <div class="container-fluid fh5co_footer_right_reserved text-center">
     <div><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font></div>
       <div >
-        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#update"> Cập Nhật </button>
+        <button type="button" name="change" class="btn btn-primary" data-toggle="collapse" data-target="#update" onclick = "change_button()"> Cập Nhật </button>
       </div>
-
-
 </div>
 <div class="container-fluid pb-4 pt-4 paddding">
   <table style="width: 100%; align: center;" >
