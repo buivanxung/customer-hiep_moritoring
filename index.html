@@ -199,14 +199,10 @@
           return true;
         }
         function change_button() {
-          console.log($("#change").val());
-          console.log($("#change").button());
-          console.log($("#change").html());
-          $("change").text('Đóng');
-          if ($("#change").val() == "Đóng") {
-            $("#change").val("Cập Nhật");
+          if ($("#change").html() == "Đóng") {
+            $("#change").html("Cập Nhật");
           }else {
-            $("#change").val("Đóng");
+            $("#change").html("Đóng");
           }
           return true;
         }
