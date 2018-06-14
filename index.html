@@ -199,7 +199,9 @@
           return true;
         }
         function change_button() {
+          console.log($("#change").val());
           if ($("#change").val() == "Đóng") {
+            console.log("OL");
             $("#change").val("Cập Nhật");
           }else {
             $("#change").val("Đóng");
@@ -392,6 +394,9 @@
       <th class="text-center" style="align: center; width: 30%">
         <div class="text-center">
           <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()" >Xác Nhận</button>
+        </div>
+        <div class="">
+          <p>     </p>
         </div>
         <div class="container-fluid text-center">
           <label for=""><<span id="check2"> </span></label>
