@@ -28,9 +28,10 @@
           $('#ph1').html("0");
           $('#status').html("Đang kết nối");
           $('#T').html("0 - 0");
-           $('#C').html("0 - 0");
-           $('#P').html("0 - 0");
-           $('#O').html("0 - 0");
+          $('#C').html("0 - 0");
+          $('#P').html("0 - 0");
+          $('#O').html("0 - 0");
+          $('#mode_update').prop("disabled", true);
           socket = io.connect('http://103.15.51.143:5000',{
             reconnection: true,
             reconnectionDelay: 1000,
@@ -98,7 +99,6 @@
             $('#O').html(nO[1]+ "-" + xO[1]);
             $('#P').html(nP[1]+ "-" + xP[1]);
           });
-
           $('input').on('input', function() {
            imaxTemp = $('#maxTemp').val();
            iminTemp = $('#minTemp').val();
@@ -343,11 +343,11 @@
             <label for=""> <strong>Nhiệt độ<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input id="maxTemp" type="number" step="0.05" class="form-control" size="30" min="20" max="100">
+          <input id="maxTemp" type="number" step="1" class="form-control" size="30" min="20" max="100">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input id="minTemp" type="number" step="0.05" class="form-control" size="30" min="15" max="50">
+          <input id="minTemp" type="number" step="1" class="form-control" size="30" min="15" max="50">
         </div>
       </th>
       <th>
@@ -356,11 +356,11 @@
             <label for=""> <strong>Độ mặn<strong></label>
           </div>
           <label for="usr">Max:</label>
-          <input id="maxCond" type="number" step="0.05" class="form-control" size="30" min="10" max="80">
+          <input id="maxCond" type="number" step="1" class="form-control" size="30" min="10" max="80">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input id="minCond" type="number" step="0.05" class="form-control" size="30" min="1" max="80">
+          <input id="minCond" type="number" step="1" class="form-control" size="30" min="1" max="80">
         </div>
       </th>
       <th>
@@ -369,11 +369,11 @@
             <label for=""> <strong>Oxy<strong></label>
           </div>
           <label for="usr">Max:</label>
-        <input id="maxOxy" type="number" step="0.05" class="form-control" size="30" min="1" max="100">
+        <input id="maxOxy" type="number" step="1" class="form-control" size="30" min="1" max="100">
         </div>
         <div class="form-group">
           <label for="pwd">Min:</label>
-          <input id="minOxy" type="number" step="0.05" class="form-control" size="30" min="1" max="100">
+          <input id="minOxy" type="number" step="1" class="form-control" size="30" min="1" max="100">
         </div>
       </th>
       <th>
@@ -394,7 +394,7 @@
           <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()" >Xác Nhận</button>
         </div>
         <div class="form-group text-center">
-          <label for=""><<span id="check2"> </span></label>
+          <label for=""><span id="check2"> </span></label>
         </div>
         </th>
     </tr>
