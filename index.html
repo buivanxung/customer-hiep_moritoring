@@ -32,7 +32,7 @@
           $('#P').html("0 - 0");
           $('#O').html("0 - 0");
           $('#mode_update').prop("disabled", true);
-          socket = io.connect('http://103.15.51.143:5000',{
+          socket = io.connect('http://demo.phadistribution.com:5000',{
             reconnection: true,
             reconnectionDelay: 1000,
             reconnectionDelayMax : 5000,
@@ -142,7 +142,7 @@
 
         function run() {
           if (socket) {
-  					socket.emit('server_web_control', "R");
+  					alert("Bạn không có quyền!");
   				}
           if (r_status == false) {
              $("input[name='run']").attr("disabled", "disabled");
@@ -153,7 +153,7 @@
         }
         function stop() {
             if (socket) {
-  					socket.emit('server_web_control', "S");
+  					alert("Bạn không có quyền!");
   				 }
            if (r_status == false) {
              $("input[name='run']").removeAttr("disabled");
@@ -166,13 +166,13 @@
           if (r_status == true) {
             status = false;
             if (socket) {
-            socket.emit('server_web_status', "M");
+            alert("Bạn không có quyền!");
             }
             $("input[name='manual']").attr("disabled", "disabled");
           }else {
             r_status = true;
               if (socket) {
-                socket.emit('server_web_status', "A");
+                alert("Bạn không có quyền!");
               }
             $("input[name='manual']").attr("disabled", "disabled");
           }
@@ -190,9 +190,8 @@
           iminPH = $('#minPH').val();
           var data = "xT:" + imaxTemp + "/" + "nT:" + iminTemp + "/" + "xC:" + imaxCond + "/" + "nC:" + iminCond  + "/" + "xO:" + imaxOxy + "/" + "nO:" + iminOxy + "/" +  "xP:" + imaxPH + "/" + "nP:" + iminPH + "/";
           if (socket && imaxPH != 0) {
-  					socket.emit('web_update', data);
+  					alert("Bạn không có quyền!");
              $("#mode_update").prop("disabled", true);
-             alert("Đã gửi yêu cầu thành công!");
   				}else {
             alert("Lỗi kết nối!");
           }
