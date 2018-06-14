@@ -22,6 +22,7 @@
       var imaxTemp='',iminTemp='',imaxCond='',iminCond='',imaxOxy='',iminOxy='',imaxPH='',iminPH='';
       $(document).ready(function()
         {
+          $('#wait_data').html("Đang chờ dữ liệu cập nhật");
           $('#temp1').html("0");
           $('#conduc1').html("0");
           $('#oxy1').html("0");
@@ -54,7 +55,7 @@
             $('#conduc1').html(cond_v);
             $('#oxy1').html(oxy_v);
             $('#ph1').html(ph_v);
-            console.log(res);
+            $('#wait_data').html(" ");
   				});
           socket.on('server_status', function(data) {
             if (data == "R" ) {
@@ -69,7 +70,6 @@
               $("input[name='stop']").attr("disabled", "disabled");
               $("input[name='run']").removeAttr("disabled");
             }
-            console.log(data);
           });
           socket.on('server_control_status', function(data) {
             c_connect = false;
@@ -82,7 +82,6 @@
               $("input[name='stop']").attr("disabled", "disabled");
               $("input[name='manual']").removeAttr("disabled");
             }
-            console.log(data);
           });
           socket.on('server_update_web', function(data) {
             var res = data.split("/");
@@ -124,6 +123,7 @@
               $('#mode').html("Mode: Điều khiển bằng tay");
                 $("input[name='manual']").val('Tự động');
             }
+
           }, 1000);
           setInterval(function () {
             if (c_connect == true) {
@@ -176,7 +176,6 @@
               }
             $("input[name='manual']").attr("disabled", "disabled");
           }
-  	       console.log(r_status);
          return true;
         }
         function update_mix() {
@@ -295,6 +294,10 @@
   </table>
 </div>
 <div class="container-fluid fh5co_footer_right_reserved text-center">
+  <div > <font size = "4" color="#ff0000">
+    <label for=""><span id="wait_data"> </span></label>
+
+  </div>
     <div><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font></div>
       <div >
         <button type="button" id="change" class="btn btn-primary" data-toggle="collapse" data-target="#update" onclick = "change_button()"> Cập Nhật </button>
@@ -400,7 +403,7 @@
   </table>
 </div>
 <div class="container-fluid fh5co_footer_right_reserved text-center">
-  <div> Một sản phẩm IoT dự án cho khách hàng <strong>PHA </strong> VIỆT NAM  </div>
+  <div> Một sản phẩm IoT dự án cho khách hàng <strong>PHA </strong> Distribution VIỆT NAM  </div>
   <p> <a href="https://www.phadistribution.com">www.phadistribution.com</a></p>
 </div>
 </body>
