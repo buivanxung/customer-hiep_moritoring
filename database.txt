@@ -8,6 +8,7 @@ CREATE TABLE moritoring (
   conductivity Float(53),
   oxy  Float(53),
   ph Float(53),
+  battery Float(53),
   created_at timestamp,
   updated_at timestamp,
   deleted_at timestamp,

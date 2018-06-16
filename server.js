@@ -30,6 +30,7 @@ var configpg = {
 
 var pool = new pg.Pool(configpg);
 socket.on('server_feedback', function(data) {
+    var name = "Hiep";
     var res = data.split(",");
     var tempt = res[0].split("=");
     var tempt_v = tempt[1];
