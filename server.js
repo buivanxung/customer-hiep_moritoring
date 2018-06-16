@@ -19,8 +19,8 @@ app.get('/',function(req,res){
 var pg = require('pg')
 
 var configpg = {
-  user:'datalora',
-  database: 'loradb',
+  user:'datamoritoring',
+  database: 'moritoringdb',
   password: '1234567',
   host: 'localhost',
   port: 5432,
