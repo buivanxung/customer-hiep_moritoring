@@ -92,7 +92,7 @@ io.on('connection', function (socket) {
               if (err) {
                 return console.error('error happened during query', err)
               }
-            }
+            })
           })
       console.log("R"+ data);
       });
