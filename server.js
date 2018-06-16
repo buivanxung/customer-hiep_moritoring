@@ -46,7 +46,7 @@ socket.on('server_feedback', function(data) {
           if (err) {
             return console.error('error fetching client from pool', err)
           }
-          client.query("INSERT INTO public.moritoring(name, temperature, conductivity, oxy, ph, battery, created_at, updated_at) VALUES('"+name+"','"+tempt_v+"','"+cond_v+"','"+oxy_v+"','"+ph_v+"','"+bat_v+"','Now()','Now()')", function(err, result) {
+          client.query("INSERT INTO moritoring(name, temperature, conductivity, oxy, ph, battery, created_at, updated_at) VALUES('"+name+"','"+tempt_v+"','"+cond_v+"','"+oxy_v+"','"+ph_v+"','"+bat_v+"','Now()','Now()')", function(err, result) {
             done();
             if (err) {
               return console.error('error happened during query', err)
