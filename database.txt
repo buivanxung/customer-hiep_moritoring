@@ -1,0 +1,26 @@
+create role datamoritoring with login password '1234567';
+create database moritoringdb with owner datamoritoring;
+\c moritoringdb
+CREATE TABLE moritoring (
+  id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  temperature Float(53),
+  conductivity Float(53),
+  oxy  Float(53),
+  ph Float(53),
+  created_at timestamp,
+  updated_at timestamp,
+  deleted_at timestamp,
+  PRIMARY KEY (id)
+);
+CREATE SEQUENCE moritoring_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE moritoring_id_seq OWNED BY moritoring.id;
+ALTER TABLE ONLY moritoring ALTER COLUMN id SET DEFAULT nextval('moritoring_id_seq'::regclass);
+GRANT ALL ON moritoring_id_seq TO datamoritoring;
+GRANT ALL ON moritoring TO datamoritoring;
+\q
