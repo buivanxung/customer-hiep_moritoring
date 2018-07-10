@@ -53,7 +53,6 @@ socket.on('server_feedback', function(data) {
             }
           })
         })
-    console.log("R"+ data);
     });
     io.on('connection', function (socket) {
       console.log("New connection");
