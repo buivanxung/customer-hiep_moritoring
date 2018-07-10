@@ -60,6 +60,7 @@ socket.on('server_feedback', function(data) {
       socket.on('message', function(data) {
         socket.emit("reciver_data", data);
       })
+    })
 http.listen(8085, function () {
   console.log("Server running");
 });
