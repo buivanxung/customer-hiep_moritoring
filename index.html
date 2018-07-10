@@ -22,7 +22,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
-    var database;
+    var database = null;
       var socket;
         {
           socket = io.connect('http://wirelesstech.online:8085',{
@@ -35,6 +35,11 @@
             $('#data').prepend('<li> <strong> Data: </strong>' + data + "<strong>  Time: </strong>" + new Date() + '</li>');
             database = data;
   				});
+          setInterval(function () {
+            if (database == null) {
+              $('#data').html("Waitting data ... ");
+            }
+          }, 100);
       }
     </script>
 </head>
