@@ -55,6 +55,11 @@ socket.on('server_feedback', function(data) {
         })
     console.log("R"+ data);
     });
-http.listen(5000, function () {
+    io.on('connection', function (socket) {
+      console.log("New connection");
+      socket.on('message', function(data) {
+        socket.emit("reciver_data", data);
+      })
+http.listen(8085, function () {
   console.log("Server running");
 });
