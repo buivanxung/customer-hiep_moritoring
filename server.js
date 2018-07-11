@@ -57,7 +57,7 @@ socket.on('server_feedback', function(data) {
     io.on('connection', function (socket) {
       console.log("New connection");
       socket.on('message', function(data) {
-        socket.emit("reciver_data", data);
+        socket.broadcast.emit("reciver_data", data);
       })
     })
 http.listen(8085, function () {
