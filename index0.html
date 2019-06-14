@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <!-- Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <title> Technology</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/modernizr-3.5.0.min.js"></script>
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      var socket;
+      var c_connect = true;
+  	  var r_status = true;
+      var maxTemp=0,minTemp=0,maxCond=0,minCond=0,maxOxy=0,minOxy=0,maxPH=0,minPH=0;
+      var imaxTemp='',iminTemp='',imaxCond='',iminCond='',imaxOxy='',iminOxy='',imaxPH='',iminPH='';
+      $(document).ready(function()
+        {
+          $('#wait_data').html("Đang chờ dữ liệu cập nhật");
+          $('#temp1').html("0");
+          $('#conduc1').html("0");
+          $('#oxy1').html("0");
+          $('#ph1').html("0");
+          $('#status').html("Đang kết nối");
+          $('#T').html("0 - 0");
+          $('#C').html("0 - 0");
+          $('#P').html("0 - 0");
+          $('#O').html("0 - 0");
+          $('#mode_update').prop("disabled", true);
+          socket = io.connect('http://demo.phadistribution.com:5000',{
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax : 5000,
+            reconnectionAttempts: 99999
+          });
+  				socket.on('server_feedback', function (data) {
+            var res = data.split(",");
+            var tempt = res[0].split("=");
+            var tempt_v = tempt[1];
+            var cond = res[1].split("=");
+            var cond_v = cond[1];
+            var oxy = res[2].split("=");
+            var oxy_v = oxy[1];
+            var ph = res[3].split("=");
+            var ph_v = ph[1];
+            var bat = res[4].split("=");
+            var bat_v = bat[1];
+            $('#temp1').html(tempt_v);
+            $('#conduc1').html(cond_v);
+            $('#oxy1').html(oxy_v);
+            $('#ph1').html(ph_v);
+            $('#wait_data').html(" ");
+  				});
+          socket.on('server_status', function(data) {
+            if (data == "R" ) {
+              $('#status').html("Trạng thái bơm: Đang chạy");
+            } else if (data == "S" ) {
+              $('#status').html("Trạng thái bơm: Đang Tắt");
+            }
+            if (data == "R" && r_status == false) {
+              $("input[name='run']").attr("disabled", "disabled");
+              $("input[name='stop']").removeAttr("disabled");
+            } else if (data == "S" && r_status == false) {
+              $("input[name='stop']").attr("disabled", "disabled");
+              $("input[name='run']").removeAttr("disabled");
+            }
+          });
+          socket.on('server_control_status', function(data) {
+            c_connect = false;
+            if (data == "F") {
+              r_status = false;
+              $("input[name='manual']").removeAttr("disabled");
+            } else if (data == "T") {
+              r_status = true;
+              $("input[name='run']").attr("disabled", "disabled");
+              $("input[name='stop']").attr("disabled", "disabled");
+              $("input[name='manual']").removeAttr("disabled");
+            }
+          });
+          socket.on('server_update_web', function(data) {
+            var res = data.split("/");
+            var xT = res[0].split(":");
+            var nT = res[1].split(":");
+            var xC = res[2].split(":");
+            var nC = res[3].split(":");
+            var xO = res[4].split(":");
+            var nO = res[5].split(":");
+            var xP = res[6].split(":");
+            var nP = res[7].split(":");
+            $('#T').html(nT[1]+ "-" + xT[1]);
+            $('#C').html(nC[1]+ "-" + xC[1]);
+            $('#O').html(nO[1]+ "-" + xO[1]);
+            $('#P').html(nP[1]+ "-" + xP[1]);
+          });
+          $('input').on('input', function() {
+           imaxTemp = $('#maxTemp').val();
+           iminTemp = $('#minTemp').val();
+           imaxCond = $('#maxCond').val();
+           iminCond = $('#minCond').val();
+           imaxOxy = $('#maxOxy').val();
+           iminOxy = $('#minOxy').val();
+           imaxPH = $('#maxPH').val();
+           iminPH = $('#minPH').val();
+           if (imaxTemp*1.00 <= iminTemp*1.00 || imaxCond*1.00 <= iminCond*1.00 || imaxPH*1.00 <= iminPH*1.00 || imaxOxy*1.00 <= iminOxy*1.00 || imaxTemp =='' || iminTemp =='' || imaxCond =='' || iminCond =='' || imaxOxy =='' || iminOxy == '' || imaxPH == '' || iminPH =='') {
+              $('#mode_update').prop("disabled", true);
+              $('#check2').html("Lỗi nhập giá trị");
+           } else {
+              $('#mode_update').removeAttr('disabled');
+              $('#check2').html(" ");
+           }
+         });
+          setInterval(function () {
+            if (r_status == true) {
+              $('#mode').html("Mode: Tự động");
+              $("input[name='manual']").val('Bằng Tay');
+            } else {
+              $('#mode').html("Mode: Điều khiển bằng tay");
+                $("input[name='manual']").val('Tự động');
+            }
+
+          }, 1000);
+          setInterval(function () {
+            if (c_connect == true) {
+              location.reload(true);
+            }
+          }, 120000);
+          setInterval(function () {
+            var raw_time = new Date();
+            if (raw_time.getMinutes() < 10) {
+              $('#time').html(raw_time.getHours()+":0"+(raw_time.getMinutes()));
+            } else {
+              $('#time').html(raw_time.getHours()+":"+(raw_time.getMinutes()));
+            }
+          }, 100);
+        });
+
+        function run() {
+          if (socket) {
+  					alert("Bạn không có quyền!");
+  				}
+          if (r_status == false) {
+             $("input[name='run']").attr("disabled", "disabled");
+             $("input[name='stop']").removeAttr("disabled");
+             $('#status').html("Máy Đang Bơm");
+          }
+          return true;
+        }
+        function stop() {
+            if (socket) {
+  					alert("Bạn không có quyền!");
+  				 }
+           if (r_status == false) {
+             $("input[name='run']").removeAttr("disabled");
+             $("input[name='stop']").attr("disabled", "disabled");
+             $('#status').html("Máy Đang Tắt");
+           }
+           return true;
+        }
+        function manual() {
+          if (r_status == true) {
+            status = false;
+            if (socket) {
+            alert("Bạn không có quyền!");
+            }
+            $("input[name='manual']").attr("disabled", "disabled");
+          }else {
+            r_status = true;
+              if (socket) {
+                alert("Bạn không có quyền!");
+              }
+            $("input[name='manual']").attr("disabled", "disabled");
+          }
+         return true;
+        }
+        function update_mix() {
+          imaxTemp = $('#maxTemp').val();
+          iminTemp = $('#minTemp').val();
+          imaxCond = $('#maxCond').val();
+          iminCond = $('#minCond').val();
+          imaxOxy = $('#maxOxy').val();
+          iminOxy = $('#minOxy').val();
+          imaxPH = $('#maxPH').val();
+          iminPH = $('#minPH').val();
+          var data = "xT:" + imaxTemp + "/" + "nT:" + iminTemp + "/" + "xC:" + imaxCond + "/" + "nC:" + iminCond  + "/" + "xO:" + imaxOxy + "/" + "nO:" + iminOxy + "/" +  "xP:" + imaxPH + "/" + "nP:" + iminPH + "/";
+          if (socket && imaxPH != 0) {
+  					alert("Bạn không có quyền!");
+             $("#mode_update").prop("disabled", true);
+  				}else {
+            alert("Lỗi kết nối!");
+          }
+          return true;
+        }
+        function change_button() {
+          if ($("#change").html() == "Đóng") {
+            $("#change").html("Cập Nhật");
+          }else {
+            $("#change").html("Đóng");
+          }
+          return true;
+        }
+    </script>
+</head>
+<body style="align:center; width:100%; height: 100%; ">
+  <div >
+    <table>
+      <th>
+        <div >
+          <p>      </p>
+        </div>
+      </th>
+    </table>
+  </div>
+  <div  style="text-align:center; width:100%;">
+    <table>
+      <tr>
+        <th style="top: 0;  left: 0;  right: 0;  bottom: 0;">
+          <div class=" text-center" style=" padding: 4;  margin: 4;  vertical-align:middle; ">
+
+          </div>
+        </th>
+        <th>
+          <div class=" text-center" style=" margin: 0 auto;text-align:center; ">
+              <label style="color:#002b80;"><span><strong><font size = "6">HỆ THỐNG ĐIỀU KHIỂN VÀ GIÁM SÁT CHẤT LƯỢNG NƯỚC THỦY SẢN</font></strong></span></label>
+              <label class="font-italic"><span><font size = "5">Smart Water Monitoring and Control System for Aquaculture</font></span></label>
+          </div>
+        </th>
+      </tr>
+    </table>
+</div>
+<div >
+  <table>
+    <tr>
+      <table align="center" >
+        <th>
+          <div  align="center">
+            <label style="color:DodgerBlue;"><font size = "5"><span id="status"></font> </span></label>
+          </div>
+          <div align="center">
+            <input type="submit" name="run" value="Bật PUMP" onclick="return run();" size="5">
+            <input type="submit" name="stop" value="Tắt PUMP" onclick="return stop();" size="5">
+            <input type="submit" name="manual" value="Tự động" onclick="return manual();" size="5">
+          </div>
+          <div  align="center">
+            <label style="color:DodgerBlue;"><font size = "5"><span id="mode"></font> </span></label>
+          </div>
+        </th>
+      </table>
+    </tr>
+    <tr>
+      <table align="center" >
+        <th>
+          <h1 style="color:DodgerBlack;" class="text-center"><font size = "20"><strong><span id="time"></span></strong></font> </h1>
+          <div class="text-center"> <font size = "4" color="#ff0000">
+            <label for=""><span id="wait_data"> </span></label> </font>
+          </div>
+        </th>
+      </table>
+    </tr>
+    <tr>
+      <table style="width: 100%; margin: 0 auto;text-align:center" >
+        <tr>
+          <th> <center> <font size = "7" color="#b30059">  Nhiệt độ </font>  <font size = "5" color="#b30059">(oC)</font></center></th>
+          <th> <center> <font size = "7" color="#b30059"> Độ mặn  </font>  <font size = "5" color="#b30059">(o/00)</font></center></th>
+          <th> <center> <font size = "7" color="#b30059"> Oxy </font>  <font size = "5" color="#b30059">(mg/L)</font><center></th>
+          <th> <center> <font size = "7" color="#b30059"> pH</font></center></th>
+        </tr>
+        <tr style="align: center;">
+          <td style="width: 25%; ">
+            <div align="center">
+            <label><center><strong><font size = "10"><span id="temp1"></span></font></strong></center></label>
+            </div>
+          </td>
+          <td style="width: 25%;">
+            <div align="center">
+                <label><center><strong><font size = "10"><span id="conduc1"></span></font></strong></center></label>
+            </div>
+          </td>
+          <td style="width: 25%;">
+            <div align="center">
+            <label><center><strong><font size = "10"><span id="oxy1"></span></font></strong></center></label>
+            </div>
+          </td>
+          <td style="width: 25%;">
+            <div align="center">
+            <label><center><strong><font size = "10"><span id="ph1"></span></font></strong></center></label>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </tr>
+  </table>
+</div>
+<div class="container-fluid fh5co_footer_right_reserved text-center">
+    <div><font size = "4"> <strong>Ngưỡng cảnh báo hiện tại:<strong></font></div>
+      <div >
+        <button type="button" id="change" class="btn btn-primary" data-toggle="collapse" data-target="#update" onclick = "change_button()"> Cập Nhật </button>
+      </div>
+</div>
+<div class="container-fluid pb-4 pt-4 paddding">
+  <table style="width: 100%; align: center;" >
+    <tr>
+      <th> <center> <font size = "4" color="#47476b">  Nhiệt độ (oC) </font></center></th>
+      <th> <center> <font size = "4" color="#47476b"> Độ mặn (o/00) </font></center></th>
+      <th> <center> <font size = "4" color="#47476b"> Oxy (mg/L)</font><center></th>
+      <th> <center> <font size = "4" color="#47476b"> pH</font></center></th>
+    </tr>
+    <tr style="align: center;">
+      <td style="width: 25%; ">
+        <div align="center">
+        <label><center><strong><font size = "6"><span id="T"></span></font></strong></center></label>
+        </div>
+      </td>
+      <td style="width: 25%;">
+        <div align="center">
+            <label><center><strong><font size = "6"><span id="C"></span></font></strong></center></label>
+        </div>
+      </td>
+      <td style="width: 25%;">
+        <div align="center">
+        <label><center><strong><font size = "6"><span id="O"></span></font></strong></center></label>
+        </div>
+      </td>
+      <td style="width: 25%;">
+        <div align="center">
+        <label><center><strong><font size = "6"><span id="P"></span></font></strong></center></label>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<div  id="update" class="collapse" style="background: #e6f3ff" >
+  <table style=" width: 80%; margin: 0 auto;text-align:center" >
+    <tr style="align: center;">
+      <th>
+        <div class="form-group">
+          <div style="text-align: center">
+            <label for=""> <strong>Nhiệt độ<strong></label>
+          </div>
+          <label for="pwd">Min:</label>
+          <input id="minTemp" type="number" step="1" class="form-control" size="30" min="15" max="50">
+        </div>
+        <div class="form-group">
+          <label for="usr">Max:</label>
+          <input id="maxTemp" type="number" step="1" class="form-control" size="30" min="20" max="100">
+        </div>
+      </th>
+      <th>
+        <div class="form-group">
+          <div style="text-align: center">
+            <label for=""> <strong>Độ mặn<strong></label>
+          </div>
+          <label for="pwd">Min:</label>
+          <input id="minCond" type="number" step="1" class="form-control" size="30" min="1" max="80">
+        </div>
+        <div class="form-group">
+          <label for="usr">Max:</label>
+          <input id="maxCond" type="number" step="1" class="form-control" size="30" min="10" max="80">
+        </div>
+      </th>
+      <th>
+        <div class="form-group">
+          <div style="text-align: center">
+            <label for=""> <strong>Oxy<strong></label>
+          </div>
+          <label for="pwd">Min:</label>
+          <input id="minOxy" type="number" step="1" class="form-control" size="30" min="1" max="100">
+        </div>
+        <div class="form-group">
+          <label for="usr">Max:</label>
+        <input id="maxOxy" type="number" step="1" class="form-control" size="30" min="1" max="100">
+        </div>
+      </th>
+      <th>
+        <div class="form-group">
+          <div class="form-group">
+            <div style="text-align: center">
+                <label for=""> <strong>pH<strong></label>
+            </div>
+            <label for="pwd">Min:</label>
+            <input id="minPH" type="number" step="0.05" class="form-control" size="30" min="1" max="14">
+          </div>
+          <label for="usr">Max:</label>
+          <input id="maxPH" type="number" step="0.05" class="form-control" size="30" min="1" max="14">
+        </div>
+      </th>
+      <th class="text-center" style="align: center; width: 30%">
+        <div class="text-center">
+          <button type="button" name="button"  id="mode_update" class="btn btn-info btn-lg" onclick = "update_mix()" >Xác Nhận</button>
+        </div>
+        <div class="form-group text-center">
+          <label for=""><span></span></label>
+          <label style="color:#ff0000"><span id="check2"> </span></label>
+        </div>
+        </th>
+    </tr>
+  </table>
+</div>
+<div class="container-fluid fh5co_footer_right_reserved text-center">
+  <div> Một sản phẩm IoT dự án cho khách hàng <strong>PHA </strong> Distribution VIỆT NAM  </div>
+  <p> <a href="https://www.phadistribution.com">www.phadistribution.com</a></p>
+</div>
+</body>
+</html>
